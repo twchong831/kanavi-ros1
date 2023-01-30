@@ -1,8 +1,5 @@
 # Kanavi-mobility co., ltd., LiDAR ROS Driver
 
-collaborator test
-2nd add test another
-
 ## Contents
 
 - [Kanavi-mobility co., ltd., LiDAR ROS Driver](#kanavi-mobility-co-ltd-lidar-ros-driver)
