@@ -14,7 +14,7 @@ VL_AS16=${LiDAR}/VL_AS16
 INDUSTRIAL=${LiDAR}/industrial
 parser=${LiDAR}/parser
 
-#check OS
+#check Os
 OS_NAME=$(OS)
 UNAME_S:= $(shell uname -s)
 ifeq ( $(OS), WIndows_NT )
