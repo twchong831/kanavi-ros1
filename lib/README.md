@@ -1,29 +1,28 @@
 # Carnavicom co.,ltd. LiDAR LIB
 
-## Development ENV.
+## Development ENV
 
 | **Support**    | **OS**  |
 | ------------------|---|
 | ✅   |Ubuntu 20.04    |
 | ✅   |mac OS          |
 
-
 ### Support LiDAR Device
 
-|      | ***Name***    | ***Desciption***                          |
+|      | ***Name***    | ***Description***                          |
 | ---- | --------------------- | ------------------------------------------------- |
-| ✅   | VL-AS16               | 16ch 145$\text{\textdegree}$ LiDAR Sensor       |
+| ✅   | **VL-R016AK01**               | 16ch 145&deg; LiDAR Sensor       |
 | ⬜️ | VL-L001IK01           | 1ch laser range finder                            |
-| ⬜️ | VL-R001IK01           | 1ch 120$\text{\textdegree}$ LiDAR Sensor        |
-| ✅   | **VL-R002IF01** | 2ch 120$\text{\textdegree}$ LiDAR Sensor (R2)   |
-| ✅   | **VL-R001IK02** | 1ch 300$\text{\textdegree}$ LiDAR Sensor (R300) |
-| ⬜️ | VL-R004IK01           | 4ch 90$\text{\textdegree}$ LiDAR Sensor?        |
-| ⬜️ | VL-R004IK02           | 4ch 90$\text{\textdegree}$ LiDAR Sensor??       |
+| ⬜️ | VL-R001IK01           | 1ch 120&deg; LiDAR Sensor        |
+| ✅   | **VL-R002IK01** | 2ch 120&deg; LiDAR Sensor (R2)   |
+| ✅   | **VL-R001IK02** | 1ch 300&deg; LiDAR Sensor (R300) |
+| ⬜️ | VL-R004IK01           | 4ch 90&deg; LiDAR Sensor?        |
+| ⬜️ | VL-R004IK02           | 4ch 90&deg; LiDAR Sensor??       |
 
 ## How to build Carnavicom LiDAR LIB
 
 ```powershell
-make all 	# install carnavicom LIB
+make all  # install carnavicom LIB
 ```
 
 ### where LIB
