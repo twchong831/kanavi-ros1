@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/tw/workspace/my/01_research/LIBRAY_CARNAVICOM/LiDAR'
+(cd VL_AS16;	make clean)
+(cd parser;	make clean)
+make: Leaving directory '/home/tw/workspace/my/01_research/LIBRAY_CARNAVICOM/LiDAR'
+ 
