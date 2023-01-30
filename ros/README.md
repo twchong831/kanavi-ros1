@@ -3,22 +3,22 @@
 ## Contents
 
 - [Kanavi-mobility co., ltd., LiDAR ROS Driver](#kanavi-mobility-co-ltd-lidar-ros-driver)
-	- [Contents](#contents)
-	- [Development ENV](#development-env)
-	- [Support LiDAR Device](#support-lidar-device)
-	- [How to Build Kanavi-mobility LiDAR ROS Package](#how-to-build-kanavi-mobility-lidar-ros-package)
-	- [How to start ROS Node](#how-to-start-ros-node)
-	- [Directories](#directories)
-		- [CARNAVICOM\_LIB](#carnavicom_lib)
-		- [carnavicomlidar\_ros](#carnavicomlidar_ros)
-	- [Update Log](#update-log)
-		- [2022-06-29](#2022-06-29)
-		- [2022-07-04](#2022-07-04)
-		- [2022-07-05](#2022-07-05)
-		- [2022-09-07](#2022-09-07)
-		- [2022-09-21](#2022-09-21)
-		- [2023-01-25](#2023-01-25)
-		- [2023-01-26](#2023-01-26)
+  - [Contents](#contents)
+  - [Development ENV](#development-env)
+  - [Support LiDAR Device](#support-lidar-device)
+  - [How to Build Kanavi-mobility LiDAR ROS Package](#how-to-build-kanavi-mobility-lidar-ros-package)
+  - [How to start ROS Node](#how-to-start-ros-node)
+  - [Directories](#directories)
+    - [CARNAVICOM\_LIB](#carnavicom_lib)
+    - [carnavicomlidar\_ros](#carnavicomlidar_ros)
+  - [Update Log](#update-log)
+    - [2022-06-29](#2022-06-29)
+    - [2022-07-04](#2022-07-04)
+    - [2022-07-05](#2022-07-05)
+    - [2022-09-07](#2022-09-07)
+    - [2022-09-21](#2022-09-21)
+    - [2023-01-25](#2023-01-25)
+    - [2023-01-26](#2023-01-26)
 
 ## Development ENV
 
@@ -30,10 +30,10 @@
 
 |     | Name        | Description                                     |
 | --- | ----------- | ----------------------------------------------- |
-| ✅   | VL-AS16     | 16ch 145&deg; LiDAR Sensor       |
+| ✅   | VL-R016AK01     | 16ch 145&deg; LiDAR Sensor       |
 | ⬜️   | VL-L001IK01 | 1ch laser range finder                          |
 | ⬜️   | VL-R001IK01 | 1ch 120&deg; LiDAR Sensor        |
-| ✅   | VL-R002IF01 | 2ch 120&deg; LiDAR Sensor (R2)   |
+| ✅   | VL-R002IK01 | 2ch 120&deg; LiDAR Sensor (R2)   |
 | ✅   | VL-R001IK02 | 1ch 300&deg; LiDAR Sensor (R300) |
 | ⬜️   | VL-R004IK01 | 4ch 90&deg; LiDAR Sensor?        |
 | ⬜️   | VL-R004IK02 | 4ch 90&deg; LiDAR Sensor??       |
