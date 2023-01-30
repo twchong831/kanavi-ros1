@@ -41,6 +41,7 @@
 ## How to Build Kanavi-mobility LiDAR ROS Package
 
 ```sh
+cd ros
 make all    # install carnavicom LiDAR LIB and ROS driver
 # if) make lib : install carnavicom LiDAR LIB only
 # if) make ros : install carnavicom LiDAR ROS driver only
