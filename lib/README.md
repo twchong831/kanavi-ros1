@@ -46,12 +46,6 @@ make remove
 
 - Displaying LiDAR data in top view using Carnavicom LIB and opencv.
 
-## pkg-config
-```powershell
-pkg-config --libs carnavicom_lib
-pkg-config --cflags carnavicom_lib
-```
-
 ## Update List
 
 - 2022.06.01 First Generated
