@@ -52,6 +52,7 @@ private:
 	void parseLength(const std::vector<u_char> &input, carnaviDatagram &output, int ch);
 	void R2(const std::vector<u_char> &input, carnaviDatagram &output);
 	void R300(const std::vector<u_char> &input, carnaviDatagram &output);
+	void R4(const std::vector<u_char> &input, carnaviDatagram &output);
 
 public:
 	industrialLiDAR(/* args */);
