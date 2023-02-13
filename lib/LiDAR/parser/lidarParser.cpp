@@ -3,15 +3,15 @@
 
 lidarParser::lidarParser()
 {
-    // protocolDatagram = new carnaviDatagram();
-    g_LiDARModel = CARNAVICOM::MODEL::VL_AS16;
+	// protocolDatagram = new carnaviDatagram();
+	g_LiDARModel = CARNAVICOM::MODEL::VL_AS16;
 
-    m_detect_Start = false;
-    m_detect_End = false;
+	m_detect_Start = false;
+	m_detect_End = false;
 
-    g_checkModel = true;
+	g_checkModel = true;
 
-    m_vlas16_Processor = new VL_AS16();
+	m_vlas16_Processor = new VL_AS16();
 	m_industrial = new industrialLiDAR();
 
 
@@ -31,22 +31,26 @@ lidarParser::lidarParser()
  */
 bool lidarParser::setData(const std::vector<u_char> &data)
 {
-    if(g_checkModel)
-    {
-        protocolDatagram.LiDAR_Model = classificationModel(data);  //라이다 종류 확인
+	if(g_checkModel)
+	{
+		protocolDatagram.LiDAR_Model = classificationModel(data);  //라이다 종류 확인
 		if(protocolDatagram.LiDAR_Model != -1)	// not lidar data check
 		{
 			g_checkModel = false;
 		}
+		else
+		{
+			perror("CAN NOT Detected LiDAR Sensor...");
+		}
 		// printf("model ? %d\n", protocolDatagram.LiDAR_Model);
-    }
+	}
 
-    switch (protocolDatagram.LiDAR_Model)
-    {
-    case static_cast<int>(CARNAVICOM::MODEL::LiDAR::VL_AS16) :
-        /* code */
+	switch (protocolDatagram.LiDAR_Model)
+	{
+	case static_cast<int>(CARNAVICOM::MODEL::LiDAR::VL_AS16) :
+		/* code */
 		// printf("[lidarParser][setData] classification AS16!\n");
-        return accumulateData_VLAS16(data);
+		return accumulateData_VLAS16(data);
 	case CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R002IF01:
 		// printf("[lidarParser][setData] classification R2!\n");
 		return accumulateData_industrial(data, protocolDatagram.LiDAR_Model);
@@ -56,11 +60,12 @@ bool lidarParser::setData(const std::vector<u_char> &data)
 		return accumulateData_industrial(data, protocolDatagram.LiDAR_Model);
 	case CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R004IK02:
 		// break;
-		printf("[lidarParser][setData] classification R4!\n");
+		// printf("[lidarParser][setData] classification R4!\n");
 		return accumulateData_industrial(data, protocolDatagram.LiDAR_Model);
-    default:
+	default:
+		printf("[lidarParser][setData] WHAT?! UnKnown LiDAR Sensor %d\n", protocolDatagram.LiDAR_Model);
 		return false;
-    }
+	}
 
 	return true;
 }
@@ -72,7 +77,7 @@ bool lidarParser::setData(const std::vector<u_char> &data)
  */
 int lidarParser::getLidarModel()
 {
-    return protocolDatagram.LiDAR_Model;
+	return protocolDatagram.LiDAR_Model;
 }
 
 
@@ -85,7 +90,7 @@ void lidarParser::getLiDARdatagram(carnaviDatagram &datagram)
 {
 	if(protocolDatagram.PARA_Input_END)	//check lidar data input end
 	{
-    	datagram = protocolDatagram;
+		datagram = protocolDatagram;
 	}
 }
 
@@ -98,17 +103,17 @@ void lidarParser::getLiDARdatagram(carnaviDatagram &datagram)
  */
 int lidarParser::classificationModel(const std::vector<u_char> &data)
 {
-    // printf("[parser][classification MODEL]\n");
+	// printf("[parser][classification MODEL]\n");
 
-    if((static_cast<int>(data[0]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::HEAD::LOWER))
-        && (static_cast<int>(data[1]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::HEAD::UPPER))
+	if((static_cast<int>(data[0]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::HEAD::LOWER))
+		&& (static_cast<int>(data[1]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::HEAD::UPPER))
 		&& (static_cast<int>(data[data.size() - 2]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::TAIL::LOWER))
-        && (static_cast<int>(data[data.size() - 1]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::TAIL::UPPER)))		// VL-AS16 header & tail detected
-    {
-        return static_cast<int>(CARNAVICOM::MODEL::LiDAR::VL_AS16);
-    }
+		&& (static_cast<int>(data[data.size() - 1]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::TAIL::UPPER)))		// VL-AS16 header & tail detected
+	{
+		return static_cast<int>(CARNAVICOM::MODEL::LiDAR::VL_AS16);
+	}
 	else if((static_cast<int>(data[0]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::HEAD::LOWER))
-        && (static_cast<int>(data[1]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::HEAD::UPPER)))					// VL-AS16 only header detected
+		&& (static_cast<int>(data[1]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::HEAD::UPPER)))					// VL-AS16 only header detected
 	{
 		return static_cast<int>(CARNAVICOM::MODEL::LiDAR::VL_AS16);
 	}
@@ -139,7 +144,7 @@ int lidarParser::classificationModel(const std::vector<u_char> &data)
 void lidarParser::parsing_VLAS16(const std::vector<u_char> &data)
 {
 //    g_lengthBuffer.clear();
-    parsingRawData(data, protocolDatagram);
+	parsingRawData(data, protocolDatagram);
 }
 
 /**
@@ -152,49 +157,49 @@ void lidarParser::parsing_VLAS16(const std::vector<u_char> &data)
 bool lidarParser::accumulateData_VLAS16(const std::vector<u_char> &data)
 {
 	// header detected
-    if((static_cast<int>(data[0]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::HEAD::LOWER))
-        && (static_cast<int>(data[1]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::HEAD::UPPER)))
-    {
-		protocolDatagram.clear();
+	if((static_cast<int>(data[0]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::HEAD::LOWER))
+		&& (static_cast<int>(data[1]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::HEAD::UPPER)))
+	{
+		// protocolDatagram.clear();
 		g_lidarBuffer.clear();
 		g_lidarBuffer = data;
-        m_detect_Start  = true;
-    }
+		m_detect_Start  = true;
+	}
 
 	// tail detected
-    if(static_cast<int>(data[data.size() - 2]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::TAIL::LOWER)
-        && static_cast<int>(data[data.size() - 1]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::TAIL::UPPER)	
-        && m_detect_Start)
-    {
-        for(int i=0; i<data.size(); i++)
-        {
-            g_lidarBuffer.push_back(data[i]);
-        }
-        m_detect_End = true;
-    }
+	if(static_cast<int>(data[data.size() - 2]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::TAIL::LOWER)
+		&& static_cast<int>(data[data.size() - 1]) == static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_VALUE::TAIL::UPPER)	
+		&& m_detect_Start)
+	{
+		for(int i=0; i<data.size(); i++)
+		{
+			g_lidarBuffer.push_back(data[i]);
+		}
+		m_detect_End = true;
+	}
 
-    if(m_detect_Start && m_detect_End )
-    {
-        //data output Sque.
-        m_detect_Start = false;
-        m_detect_End = false;
-        
-        //parsing
-        parsing_VLAS16(g_lidarBuffer);
+	if(m_detect_Start && m_detect_End )
+	{
+		//data output Sque.
+		m_detect_Start = false;
+		m_detect_End = false;
+		
+		//parsing
+		parsing_VLAS16(g_lidarBuffer);
 
-        previous_lidarBuffer.clear();
-        previous_lidarBuffer = g_lidarBuffer;
-        g_lidarBuffer.clear();
+		previous_lidarBuffer.clear();
+		previous_lidarBuffer = g_lidarBuffer;
+		g_lidarBuffer.clear();
 
 		m_detect_Start = false;
 		m_detect_End = false;
 
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 
 }
 
@@ -239,7 +244,6 @@ bool lidarParser::process_R2(const std::vector<u_char> &data)
 			== CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::HEADER)
 		{
 			m_detect_Start = true;											
-			protocolDatagram.clear();										// datagram clear
 			g_lidarBuffer.clear();											// buf clear
 			g_lidarBuffer = data;
 		}
@@ -258,12 +262,6 @@ bool lidarParser::process_R2(const std::vector<u_char> &data)
 	else if(data.size() == CARNAVICOM::INDUSTRIAL::R2::PROTOCOL_SIZE::TOTAL)
 	{
 		u_char ch = data[static_cast<int>(CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_POS::COMMAND::PARAMETER)];
-		// ERROR update 2022-09-22
-		// check datagram clear phase, when R2's 0 channel data input.
-		if(ch == 0)
-		{
-			protocolDatagram.clear();
-		}
 		m_detect_Start = true;
 		m_detect_End = true;
 		g_lidarBuffer = data;
@@ -296,7 +294,6 @@ bool lidarParser::process_R300(const std::vector<u_char> &data)
 			== CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::HEADER)
 		{
 			m_detect_Start = true;
-			protocolDatagram.clear();
 			g_lidarBuffer.clear();
 			g_lidarBuffer = data;
 		}
@@ -314,7 +311,6 @@ bool lidarParser::process_R300(const std::vector<u_char> &data)
 	}
 	else if(data.size() == CARNAVICOM::INDUSTRIAL::R300::PROTOCOL_SIZE::TOTAL)
 	{
-		protocolDatagram.clear();
 		m_detect_Start = true;
 		m_detect_End = true;
 		g_lidarBuffer = data;
@@ -347,7 +343,6 @@ bool lidarParser::process_R4(const std::vector<u_char> &data)
 			== CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::HEADER)
 		{
 			m_detect_Start = true;
-			protocolDatagram.clear();
 			g_lidarBuffer.clear();
 			g_lidarBuffer = data;
 		}
@@ -365,7 +360,6 @@ bool lidarParser::process_R4(const std::vector<u_char> &data)
 	}
 	else if(data.size() == CARNAVICOM::INDUSTRIAL::R4::PROTOCOL_SIZE::TOTAL)
 	{
-		protocolDatagram.clear();
 		m_detect_Start = true;
 		m_detect_End = true;
 		g_lidarBuffer = data;
@@ -379,6 +373,8 @@ bool lidarParser::process_R4(const std::vector<u_char> &data)
 		m_detect_Start = false;
 		m_detect_End = false;
 	}
+	
+	// printf("check Return value : %d\n", protocolDatagram.PARA_Input_END);
 	return protocolDatagram.PARA_Input_END;
 }
 
@@ -389,14 +385,14 @@ bool lidarParser::process_R4(const std::vector<u_char> &data)
  */
 size_t lidarParser::getRawDataSize()
 {
-    if(!m_detect_Start && !m_detect_End && previous_lidarBuffer.size() != 0)
-    {
-        return previous_lidarBuffer.size();
-    }
-    else
-    {
-        return 0;
-    }
+	if(!m_detect_Start && !m_detect_End && previous_lidarBuffer.size() != 0)
+	{
+		return previous_lidarBuffer.size();
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 /**
@@ -406,10 +402,10 @@ size_t lidarParser::getRawDataSize()
  */
 std::vector<u_char> lidarParser::getRawData()
 {
-    if(!m_detect_Start && !m_detect_End && previous_lidarBuffer.size() != 0)
-    {
-        return previous_lidarBuffer;
-    }
+	if(!m_detect_Start && !m_detect_End && previous_lidarBuffer.size() != 0)
+	{
+		return previous_lidarBuffer;
+	}
 }
 
 /**
@@ -420,7 +416,7 @@ std::vector<u_char> lidarParser::getRawData()
  */
 void lidarParser::parsingRawData(const std::vector<u_char> &data, carnaviDatagram &datagram)
 {
-    m_vlas16_Processor->processor(data, datagram);
+	m_vlas16_Processor->processor(data, datagram);
 }
 
 /**

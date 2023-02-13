@@ -24,7 +24,6 @@ carnavicomLidarProcessor::~carnavicomLidarProcessor()
 carnaviDatagram carnavicomLidarProcessor::process(const std::vector<u_char> &data)
 {
 	carnaviDatagram datagram;
-
 	if(m_dataParser->setData(data))
 	{
 		// printf("Parse ENd..get datagram...\n");

@@ -2,7 +2,10 @@
 
 industrialLiDAR::industrialLiDAR(/* args */)
 {
-	g_checked_CH0 = false;
+	for(int i=0; i<INDUSTRAL_MAX_CH; i++)
+	{
+		g_checked_CH[i] = false;
+	}
 }
 
 industrialLiDAR::~industrialLiDAR()
@@ -27,6 +30,9 @@ void industrialLiDAR::process(const std::vector<u_char> &input, carnaviDatagram 
 			break;
 		case CARNAVICOM::MODEL::LiDAR::VL_R001IK02:
 			R300(input, output);
+			break;
+		case CARNAVICOM::MODEL::LiDAR::VL_R004IK02:
+			R4(input, output);
 			break;
 		}
 	}
@@ -78,7 +84,7 @@ void industrialLiDAR::R2(const std::vector<u_char> &input, carnaviDatagram &outp
 		if(ch == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_0)
 		{
 			// printf("[industrial][input CH0]\n");
-			output.clear();
+			// output.clear();
 			//set specification
 			{
 				output.LiDAR_Model = CARNAVICOM::MODEL::LiDAR::VL_R002IF01;
@@ -93,15 +99,15 @@ void industrialLiDAR::R2(const std::vector<u_char> &input, carnaviDatagram &outp
 				
 			parseLength(input, output, static_cast<int>(ch & 0x0F));
 
-			g_checked_CH0 = true;
+			g_checked_CH[0] = true;
 		}
 		else if(ch == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_1)	//check ch 1 data input
 		{
 			// printf("[industrial][input CH1]\n");
-			if(g_checked_CH0)
+			if(g_checked_CH[0])
 			{
 				parseLength(input, output, static_cast<int>(ch & 0x0F));	// convert byte to length
-				g_checked_CH0 = false;
+				g_checked_CH[0] = false;
 				output.PARA_Input_END = true;		//data input complete
 			}
 		}
@@ -153,14 +159,13 @@ void industrialLiDAR::R4(const std::vector<u_char> &input, carnaviDatagram &outp
 {
 	u_char mode = input[static_cast<int>(CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_POS::COMMAND::MODE)];
 	u_char ch = input[static_cast<int>(CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_POS::COMMAND::PARAMETER)];
+	
+	printf("R4 processing...[%X]\n", ch);
 
 	if(mode == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::COMMAND::MODE::DISTANCE_DATA)
 	{
-		//check ch 0 data input
 		if(ch == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_0)
 		{
-			// output.clear();
-			//set specification
 			{
 				output.LiDAR_Model = CARNAVICOM::MODEL::LiDAR::VL_R004IK02;
 				output.PARA_Vertical_Resolution 
@@ -171,9 +176,32 @@ void industrialLiDAR::R4(const std::vector<u_char> &input, carnaviDatagram &outp
 				output.PARA_End_Angle 
 					= CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_DATA_CNT;
 			}
-				
-			parseLength(input, output, static_cast<int>(ch & 0x0F));	// convert byte to length
-			output.PARA_Input_END = true;		//data input complete
+			g_checked_CH[0] = true;
+		}
+		else if(ch == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_1)	//check ch 1 data input
+		{
+			g_checked_CH[1] = true;
+		}
+		else if(ch == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_2)	//check ch 2 data input
+		{
+			g_checked_CH[2] = true;
+		}
+		else if(ch == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_3)	//check ch 3 data input
+		{
+			g_checked_CH[3] = true;
+		}
+
+		
+		// parse data
+		parseLength(input, output, static_cast<int>(ch & 0x0F));
+
+		if(g_checked_CH[0] && g_checked_CH[1] && g_checked_CH[2] && g_checked_CH[3])
+		{
+			output.PARA_Input_END = true;
+			for(int i=0; i<INDUSTRAL_MAX_CH; i++)
+			{
+				g_checked_CH[i] = false;
+			}
 		}
 	}
 }

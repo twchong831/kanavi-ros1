@@ -38,17 +38,18 @@ endif
 lib:
 	@echo "Check CARNAVICOM LIB..."
 
-ifneq ("$(ldflags)", "")
-	@echo "Lib already set"
-	@check_LIB=false
-else
-	@echo "Library not installed"
-	@check_LIB=true
-endif
+# ifneq ("$(ldflags)", "")
+# 	@echo "Lib already set"
+# 	@check_LIB=false
+# else
+# 	@echo "Library not installed"
+# 	@check_LIB=true
+# endif
 
-ifeq ( $(check_LIB), true )
-	(cd ${LIB_PATH}; make clean; make all)
-endif
+# ifeq ( $(check_LIB), true )
+#	(cd ${LIB_PATH}; make clean; make all)
+# endif
+	(cd ${LIB_PATH}; make uninstall; make clean; make install)
 
 ros:
 	@echo "copy Carnvavicom lidar ros"

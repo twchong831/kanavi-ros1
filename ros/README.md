@@ -8,6 +8,8 @@
   - [Support LiDAR Device](#support-lidar-device)
   - [How to Build Kanavi-mobility LiDAR ROS Package](#how-to-build-kanavi-mobility-lidar-ros-package)
   - [How to start ROS Node](#how-to-start-ros-node)
+    - [RVIZ visualization Result](#rviz-visualization-result)
+      - [VL-R004IK02 (R4)](#vl-r004ik02-r4)
   - [Directories](#directories)
     - [CARNAVICOM\_LIB](#carnavicom_lib)
     - [carnavicomlidar\_ros](#carnavicomlidar_ros)
@@ -19,6 +21,7 @@
     - [2022-09-21](#2022-09-21)
     - [2023-01-25](#2023-01-25)
     - [2023-01-26](#2023-01-26)
+    - [2023-02-13](#2023-02-13)
 
 ## Development ENV
 
@@ -36,7 +39,7 @@
 | ✅   | **VL-R002IK01** | 2ch 120&deg; LiDAR Sensor (R2)   |
 | ✅   | VL-R001IK02     | 1ch 300&deg; LiDAR Sensor (R300) |
 | ⬜️   | VL-R004IK01     | 4ch 90&deg; LiDAR Sensor?        |
-| ⬜️   | VL-R004IK02     | 4ch 90&deg; LiDAR Sensor??       |
+| ✅   | **VL-R004IK02** | 4ch 90&deg; LiDAR Sensor (R4)    |
 
 ## How to Build Kanavi-mobility LiDAR ROS Package
 
@@ -66,6 +69,12 @@ rosrun carnavicomlidar_ros carnavicomlidar_ros -i 192.168.123.99 5000 -fs config
 # read config(.ini) file
 rosrun carnavicomlidar_ros carnavicomlidar_ros -fl ~/catkin_ws/src/carnavicomlidar_ros/config/config.ini
 ```
+
+### RVIZ visualization Result
+
+#### VL-R004IK02 (R4)
+
+![output-R4](./image/output_R4.png)
 
 ## Directories
 
@@ -119,3 +128,7 @@ rosrun carnavicomlidar_ros carnavicomlidar_ros -fl ~/catkin_ws/src/carnavicomlid
 ### 2023-01-26
 
 - update Company name(carnavicom->kanavi-mobility)
+
+### 2023-02-13
+
+- update & add VL-R004IK02 FUNC.
