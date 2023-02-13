@@ -43,7 +43,7 @@ void carnavi_converter::calculateAngular(int model)
 		}
 		break;
 	case CARNAVICOM::MODEL::LiDAR::VL_R002IF01:
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::VERTICAL_CHANNEL; i++)
 		{
 			v_sin.push_back(sin(DEG2RAD(CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::VERTICAL_RESOLUTION * i)));
 			v_cos.push_back(cos(DEG2RAD(CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::VERTICAL_RESOLUTION * i)));
@@ -82,7 +82,28 @@ void carnavi_converter::calculateAngular(int model)
 				h_cos.push_back(cos(DEG2RAD(CARNAVICOM::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_RESOLUTION * i)));
 			}
 		}
-
+	case CARNAVICOM::MODEL::LiDAR::VL_R004IK02:
+		for (int i = 0; i < CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_CHANNEL; i++)
+		{
+			v_sin.push_back(sin(DEG2RAD(CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_RESOLUTION * i)));
+			v_cos.push_back(cos(DEG2RAD(CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_RESOLUTION * i)));
+		}
+		if (g_checked_HorizontalReverse)
+		{
+			for (int i = CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_DATA_CNT - 1; i >= 0; i--)
+			{
+				h_sin.push_back(sin(DEG2RAD(CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_RESOLUTION * i)));
+				h_cos.push_back(cos(DEG2RAD(CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_RESOLUTION * i)));
+			}
+		}
+		else
+		{
+			for (int i = 0; i < CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_DATA_CNT; i++)
+			{
+				h_sin.push_back(sin(DEG2RAD(CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_RESOLUTION * i)));
+				h_cos.push_back(cos(DEG2RAD(CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_RESOLUTION * i)));
+			}
+		}
 		break;
 	}
 }
@@ -121,6 +142,16 @@ void carnavi_converter::generatePointCloud(const carnaviDatagram &datagram, Poin
 		for (int i = 0; i < CARNAVICOM::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_DATA_CNT; i++)
 		{
 			cloud_(i, 0) = length2point(datagram.industrial_Length[0][i], 0, 1, h_sin[i], h_cos[i]); // convert length to point coordinate
+		}
+		break;
+	case CARNAVICOM::MODEL::LiDAR::VL_R004IK02:		//R4
+		// printf("convert Length to Point3D %d %d %d %d\n", v_sin.size(), v_cos.size(), h_sin.size(), h_cos.size());
+		for (int ch = 0; ch < CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_CHANNEL; ch++)
+		{
+			for (int i = 0; i < CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_DATA_CNT; i++)
+			{
+				cloud_(i, ch) = length2point(datagram.industrial_Length[ch][i], v_sin[ch], v_cos[ch], h_sin[i], h_cos[i]); // convert length to point coordinate
+			}
 		}
 		break;
 	}
@@ -239,6 +270,12 @@ void carnavi_converter::setDatagram(const carnaviDatagram &datagram)
 		vfov = CARNAVICOM::INDUSTRIAL::SPECIFICATION::R300::VERTICAL_FoV;
 		cloud = PointCloudT(CARNAVICOM::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_DATA_CNT,
 							CARNAVICOM::INDUSTRIAL::SPECIFICATION::R300::VERTICAL_CHANNEL);
+		break;
+	case CARNAVICOM::MODEL::LiDAR::VL_R004IK02:
+		hfov = CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_FoV;
+		vfov = CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_FoV;
+		cloud = PointCloudT(CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_DATA_CNT,
+							CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_CHANNEL);
 		break;
 	}
 	printf("\n[*]Sensor Spcification---------\n");

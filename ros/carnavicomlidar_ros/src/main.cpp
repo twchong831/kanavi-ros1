@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
 	ros::init(argc, argv, "carnavi_cloud_node");	//ROS init
 	ros::Publisher lidar_pub;						//publisher define
 	ros::NodeHandle nh;								//노드 핸들러 define
-	ros::Rate loop_rate(35); 						//30Hz - freq.
+	// ros::Rate loop_rate(15); 						//30Hz - freq.
 	std::string name_fixedFrame = "map";
 	std::string name_topic = "/points";
 	bool checked_h_reverse = false;
@@ -145,7 +145,7 @@ int main(int argc, char* argv[])
 
 	float z_rotat_angle = 0;
 
-    //check argv -- 인자 확인
+	//check argv -- 인자 확인
 	if(argc == 0)
 	{
 		helpAlarm();
@@ -307,10 +307,13 @@ int main(int argc, char* argv[])
 		printf("recv_buf size %d\n", recv_buf.size());
 
 		datagram = m_carnaviLidar->process(recv_buf);								//processing, get datagram
+		end = clock();
+		result = (double)(end - start);
+		cout << "Stage 1 Time : "<< ((result)/CLOCKS_PER_SEC) * 1000 << " microseconds" << endl;
 
 		switch(m_carnaviLidar->getLiDARModel())										//check lidar model for point cloud rotation
 		{
-    	case static_cast<int>(CARNAVICOM::MODEL::LiDAR::VL_AS16) :
+		case static_cast<int>(CARNAVICOM::MODEL::LiDAR::VL_AS16) :
 			z_rotat_angle = 17.5;
 			break;
 		case CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R002IF01:
@@ -319,7 +322,10 @@ int main(int argc, char* argv[])
 		case CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R001IK02:
 			z_rotat_angle = -60;
 			break;
-    	default:
+		case CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R004IK02:
+			z_rotat_angle = -50;
+			break;
+		default:
 			break;
 		}
 
@@ -332,6 +338,7 @@ int main(int argc, char* argv[])
 
 		if(datagram.PARA_Input_END)								// All data processing END.
 		{
+			// printf("DISPLAY....\n");
 			m_convertor->setReverse(checked_h_reverse);			// check horizontal angle Reverse
 			m_convertor->setDatagram(datagram);					// convert Length array to Point Cloud
 			PointCloudT cloud = m_convertor->getPointCloud();	// get pcl::PointCloud<pcl::PointXYZRGB>
@@ -342,15 +349,19 @@ int main(int argc, char* argv[])
 
 			lidar_pub.publish(cloud_to_cloud_msg(cloud.width, cloud.height, cloud, 100, name_fixedFrame));		//broadcast MSG using ROS
 		}
+		end = clock();
+		result = (double)(end - start);
+		cout << "Stage 2 Time : "<< ((result)/CLOCKS_PER_SEC) * 1000 << " microseconds" << endl;
 		// printBuf(datagram);								//dp datagram
+		datagram.clear();
 
 		ros::spinOnce();		//update
-		loop_rate.sleep();
+		// loop_rate.sleep();
 
 		end = clock();
 		result = (double)(end - start);
 		cout << "Processing Time : "<< ((result)/CLOCKS_PER_SEC)<<" seconds" << endl;
-		cout << "Processing Time : "<< result << " microseconds" << endl;
+		cout << "Processing Time : "<< ((result)/CLOCKS_PER_SEC) * 1000 << " microseconds" << endl;
 	}
 
 	delete m_udp;

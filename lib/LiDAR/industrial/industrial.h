@@ -61,7 +61,7 @@ public:
 	void process(const std::vector<u_char> &input, carnaviDatagram &output);
 
 private:
-	bool g_checked_CH0;
+	bool g_checked_CH[INDUSTRAL_MAX_CH];
 };
 
 #endif // __INDUSTRIAL_H__

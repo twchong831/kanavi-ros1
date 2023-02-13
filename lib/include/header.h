@@ -60,6 +60,9 @@
 
 #define BUFFER_SIZE 65000
 
+#define INDUSTRAL_MAX_CH	CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_CHANNEL
+#define INDUSTRAL_MAX_CNT	CARNAVICOM::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_DATA_CNT
+
 typedef struct pointXYZ{
     float x;
     float y;
@@ -196,7 +199,7 @@ typedef struct carnavi_datagram {
 	VL_AS16_Datagram vl_as16;
 
 	// industrial
-	float industrial_Length[CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_CHANNEL][CARNAVICOM::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_DATA_CNT];	// industrial LiDAR buf
+	float industrial_Length[INDUSTRAL_MAX_CH][INDUSTRAL_MAX_CNT];	// industrial LiDAR buf
 
     carnavi_datagram() {
         LiDAR_Model = -1;
@@ -214,9 +217,9 @@ typedef struct carnavi_datagram {
 
     void clear()
     {
-		for(int i=0; i<CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_CHANNEL; i++)
+		for(int i=0; i<INDUSTRAL_MAX_CH; i++)
 		{
-			memset(industrial_Length[i], 0, CARNAVICOM::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_DATA_CNT);
+			memset(industrial_Length[i], 0, INDUSTRAL_MAX_CNT);
 		}
 		vl_as16.clear();
 
