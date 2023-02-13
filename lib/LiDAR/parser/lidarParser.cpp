@@ -54,6 +54,10 @@ bool lidarParser::setData(const std::vector<u_char> &data)
 		// break;
 		// printf("[lidarParser][setData] classification R300!\n");
 		return accumulateData_industrial(data, protocolDatagram.LiDAR_Model);
+	case CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R004IK02:
+		// break;
+		printf("[lidarParser][setData] classification R4!\n");
+		return accumulateData_industrial(data, protocolDatagram.LiDAR_Model);
     default:
 		return false;
     }
@@ -119,6 +123,8 @@ int lidarParser::classificationModel(const std::vector<u_char> &data)
 			return CARNAVICOM::MODEL::LiDAR::VL_R002IF01;
 		case CARNAVICOM::MODEL::LiDAR::VL_R001IK02:
 			return CARNAVICOM::MODEL::LiDAR::VL_R001IK02;
+		case CARNAVICOM::MODEL::LiDAR::VL_R004IK02:
+			return CARNAVICOM::MODEL::LiDAR::VL_R004IK02;
 		}
 	}
 
@@ -210,6 +216,8 @@ bool lidarParser::accumulateData_industrial(const std::vector<u_char> &data, int
 			return process_R2(data);
 		case CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R001IK02:	//R300
 			return process_R300(data);
+		case CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R004IK02:	//R4
+			return process_R4(data);
 		default:
 			return false;
 	}
@@ -315,6 +323,57 @@ bool lidarParser::process_R300(const std::vector<u_char> &data)
 	if(m_detect_Start
 		&& m_detect_End
 		&& g_lidarBuffer.size() ==  CARNAVICOM::INDUSTRIAL::R300::PROTOCOL_SIZE::TOTAL)
+	{
+		parsingRawData_industrial(g_lidarBuffer, protocolDatagram);
+		m_detect_Start = false;
+		m_detect_End = false;
+	}
+	return protocolDatagram.PARA_Input_END;
+}
+
+/**
+ * @brief 
+ * 
+ * @param data to check all Data input(industrial - VL_R004IK02(R4)
+ * @return true 
+ * @return false 
+ */
+bool lidarParser::process_R4(const std::vector<u_char> &data) 
+{
+	if(data.size() < CARNAVICOM::INDUSTRIAL::R4::PROTOCOL_SIZE::TOTAL)
+	{
+		// return false;
+		if(data[CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_POS::HEADER] 
+			== CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::HEADER)
+		{
+			m_detect_Start = true;
+			protocolDatagram.clear();
+			g_lidarBuffer.clear();
+			g_lidarBuffer = data;
+		}
+		else
+		{
+			if(m_detect_Start)
+			{
+				for(size_t i=0; i<data.size(); i++)
+				{
+					g_lidarBuffer.push_back(data[i]);
+				}
+				m_detect_End = true;
+			}
+		}
+	}
+	else if(data.size() == CARNAVICOM::INDUSTRIAL::R4::PROTOCOL_SIZE::TOTAL)
+	{
+		protocolDatagram.clear();
+		m_detect_Start = true;
+		m_detect_End = true;
+		g_lidarBuffer = data;
+	}
+
+	if(m_detect_Start
+		&& m_detect_End
+		&& g_lidarBuffer.size() ==  CARNAVICOM::INDUSTRIAL::R4::PROTOCOL_SIZE::TOTAL)
 	{
 		parsingRawData_industrial(g_lidarBuffer, protocolDatagram);
 		m_detect_Start = false;
