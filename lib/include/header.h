@@ -196,7 +196,7 @@ typedef struct carnavi_datagram {
 	VL_AS16_Datagram vl_as16;
 
 	// industrial
-	float industrial_Length[CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::VERTICAL_CHANNEL][CARNAVICOM::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_DATA_CNT];	// industrial LiDAR buf
+	float industrial_Length[CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_CHANNEL][CARNAVICOM::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_DATA_CNT];	// industrial LiDAR buf
 
     carnavi_datagram() {
         LiDAR_Model = -1;
@@ -214,7 +214,7 @@ typedef struct carnavi_datagram {
 
     void clear()
     {
-		for(int i=0; i<CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::VERTICAL_CHANNEL; i++)
+		for(int i=0; i<CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_CHANNEL; i++)
 		{
 			memset(industrial_Length[i], 0, CARNAVICOM::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_DATA_CNT);
 		}

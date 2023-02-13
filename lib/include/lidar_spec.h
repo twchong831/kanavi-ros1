@@ -222,10 +222,8 @@ namespace CARNAVICOM {
 
 		namespace R2 {
 			namespace PROTOCOL_VALUE {
-
 			}
 			namespace PROTOCOL_POS {
-
 			}
 			namespace PROTOCOL_SIZE {
 				const int TOTAL = 969;
@@ -234,16 +232,23 @@ namespace CARNAVICOM {
 
 		namespace R300 {
 			namespace PROTOCOL_VALUE {
-
 			}
 			namespace PROTOCOL_POS {
-
 			}
 			namespace PROTOCOL_SIZE {
 				const int TOTAL = 2409;
 			}
 		}
 
+		namespace R4 {
+			namespace PROTOCOL_VALUE {
+			}
+			namespace PROTOCOL_POS {
+			}
+			namespace PROTOCOL_SIZE {
+				const int TOTAL = 809;
+			}
+		}
 		namespace COMMON
 		{
 			namespace PROTOCOL_VALUE
