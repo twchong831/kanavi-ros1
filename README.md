@@ -35,9 +35,9 @@
 | --- | --------------- | -------------------------------- |
 | ✅   | **VL-R016AK01** | 16ch 145&deg; LiDAR Sensor       |
 | ⬜️   | VL-L001IK01     | 1ch laser range finder           |
-| ⬜️   | **VL-R001IK01** | 1ch 120&deg; LiDAR Sensor        |
+| ⬜️   | VL-R001IK01 | 1ch 120&deg; LiDAR Sensor        |
 | ✅   | **VL-R002IK01** | 2ch 120&deg; LiDAR Sensor (R2)   |
-| ✅   | VL-R001IK02     | 1ch 300&deg; LiDAR Sensor (R300) |
+| ✅   | **VL-R001IK02**     | 1ch 300&deg; LiDAR Sensor (R300) |
 | ⬜️   | VL-R004IK01     | 4ch 90&deg; LiDAR Sensor?        |
 | ✅   | **VL-R004IK02** | 4ch 90&deg; LiDAR Sensor (R4)    |
 
@@ -71,6 +71,10 @@ rosrun carnavicomlidar_ros carnavicomlidar_ros -fl ~/catkin_ws/src/carnavicomlid
 ```
 
 ### RVIZ visualization Result
+
+####VL-R002IK01 (R2)
+
+![output-R4](https://github.com/kanaviMobility/ROS/blob/83151f9fefc123cacc877ce8deb81573dee3af0d/ros/image/output_R2.png)
 
 #### VL-R004IK02 (R4)
 
