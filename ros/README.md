@@ -74,7 +74,7 @@ rosrun carnavicomlidar_ros carnavicomlidar_ros -fl ~/catkin_ws/src/carnavicomlid
 
 #### VL-R004IK02 (R4)
 
-![output-R4](./image/output_R4.png)
+![output-R4](https://github.com/kanaviMobility/ROS/blob/83151f9fefc123cacc877ce8deb81573dee3af0d/ros/image/output_R4.png)
 
 ## Directories
 
