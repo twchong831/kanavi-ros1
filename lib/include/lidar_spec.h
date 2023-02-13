@@ -634,4 +634,5 @@ namespace CARNAVICOM {
 		}
 	}
 }
+
 #endif // __LIDAR_SPEC_H__
