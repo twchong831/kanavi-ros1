@@ -9,6 +9,7 @@
   - [How to Build Kanavi-mobility LiDAR ROS Package](#how-to-build-kanavi-mobility-lidar-ros-package)
   - [How to start ROS Node](#how-to-start-ros-node)
     - [RVIZ visualization Result](#rviz-visualization-result)
+      - [VL-R002IK01 (R2)](#vl-r002ik01-r2)
       - [VL-R004IK02 (R4)](#vl-r004ik02-r4)
   - [Directories](#directories)
     - [CARNAVICOM\_LIB](#carnavicom_lib)
@@ -72,7 +73,7 @@ rosrun carnavicomlidar_ros carnavicomlidar_ros -fl ~/catkin_ws/src/carnavicomlid
 
 ### RVIZ visualization Result
 
-####VL-R002IK01 (R2)
+#### VL-R002IK01 (R2)
 
 ![output-R4](https://github.com/kanaviMobility/ROS/blob/b61708296beb582d901c588b770c1e037260ef03/ros/image/output_R2.png)
 
