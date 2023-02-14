@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Carnavicom.co.,ltd.
+ * Copyright (c) 2022, Kanavi-Mobility.co.,ltd.
  * All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without
@@ -28,42 +28,54 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef carnavicomLidarProcessor_H
-#define carnavicomLidarProcessor_H
-
+#ifndef __Kanavi_CONVERTER_H__
+#define __Kanavi_CONVERTER_H__
 
 /**
- * @file carnavicomProcessor.h
- * @author twchong (twchong@carnavi.com)
- * @brief to process Carnavicom LiDAR (first stage)
+ * @file kanavi_converter.h
+ * @author twchong (twchong@Kanavi.com)
+ * @brief 
  * @version 0.1
- * @date 2022-07-01
+ * @date 2022-07-05
  * 
  * @copyright Copyright (c) 2022
  * 
  */
 
-#include "../include/header.h"
-#include "../include/lidar_spec.h"
-#include "../LiDAR/parser/lidarParser.h"
-#include <cmath>
+#include "kanaviLiDAR_ros.h"
+#include <pcl/point_types_conversion.h>
 
-class carnavicomLidarProcessor
+typedef pcl::PointCloud<pcl::PointXYZRGB>	PointCloudT;
+
+class kanavi_converter
 {
 public:
-    carnavicomLidarProcessor();
-	~carnavicomLidarProcessor();
-	carnaviDatagram process(const std::vector<u_char> &data);
+	kanavi_converter(/* args */);
+	~kanavi_converter();
 
-    int getLiDARModel();
-
+	void setDatagram(const lidarDatagram &datagram);
+	void setReverse(const bool &checked=false);
+	PointCloudT getPointCloud();
 private:
+	//func.
+	void calculateAngular(int model);
+	void generatePointCloud(const lidarDatagram &datagram, PointCloudT &cloud_);
+	pcl::PointXYZRGB length2point(float len, float v_sin, float v_cos, float h_sin, float h_cos);
+	void HSV2RGB(float *fR, float *fG, float *fB, float fH, float fS, float fV);
 
-	//var.
-    carnaviDatagram *m_datagram;
-    lidarParser *m_dataParser;
+	/* data */
+	lidarDatagram g_datagram;
+	bool checked_setAngular;
 
-	int g_lidarModel;
+	std::vector<float> v_sin;
+	std::vector<float> v_cos;
+	std::vector<float> h_sin;
+	std::vector<float> h_cos;
+
+	//point cloud
+	PointCloudT cloud;
+
+	bool g_checked_HorizontalReverse;
 };
 
-#endif // carnavicomLidarProcessor_H
+#endif // __Kanavi_CONVERTER_H__

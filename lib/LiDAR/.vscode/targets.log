@@ -41,7 +41,7 @@ GDMSESSION = ubuntu
 # environment
 XMODIFIERS = @im=ibus
 # makefile
-CURDIR := /home/tw/workspace/my/01_research/LIBRAY_CARNAVICOM/LiDAR
+CURDIR := /home/tw/workspace/my/01_research/LIBRAY_KANAVI/LiDAR
 # makefile
 SHELL = /bin/sh
 # environment
@@ -113,7 +113,7 @@ DISPLAY = :0
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
-PWD = /home/tw/workspace/my/01_research/LIBRAY_CARNAVICOM/LiDAR
+PWD = /home/tw/workspace/my/01_research/LIBRAY_KANAVI/LiDAR
 # default
 .LOADED := 
 # environment

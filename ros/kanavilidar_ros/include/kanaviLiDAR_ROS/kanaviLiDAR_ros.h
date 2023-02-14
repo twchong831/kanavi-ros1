@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Carnavicom.co.,ltd.
+ * Copyright (c) 2022, Kanavi-Mobility.co.,ltd.
  * All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without
@@ -28,12 +28,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef __CARNAVICOMLIDAR_ROS_H__
-#define __CARNAVICOMLIDAR_ROS_H__
+#ifndef __KANAVILIDAR_ROS_H__
+#define __KANAVILIDAR_ROS_H__
 
 /**
- * @file carnavicomLiDAR_ros.h
- * @author twchong (twchong@carnavi.com)
+ * @file kanaviLiDAR_ros.h
+ * @author twchong (twchong@Kanavi.com)
  * @brief 
  * @version 0.1
  * @date 2022-07-05
@@ -66,14 +66,14 @@
 #include <pcl/PCLPointCloud2.h>
 #include <pcl/conversions.h>
 
-#include "CARNAVICOM_LIB/include/header.h"	//lidar process
-#include "CARNAVICOM_LIB/include/lidar_spec.h"	//lidar process
-#include "CARNAVICOM_LIB/processor/carnavicomProcessor.h"
-#include "CARNAVICOM_LIB/UDP/carnavicom_udp.h"
+#include "KANAVI_LIB/include/header.h"	//lidar process
+#include "KANAVI_LIB/include/lidar_spec.h"	//lidar process
+#include "KANAVI_LIB/processor/kanaviProcessor.h"
+#include "KANAVI_LIB/UDP/Udp.h"
 
 using namespace std;
 
-namespace CARNAVICOM{
+namespace KANAVI{
 	namespace ROS{
 		namespace CONFIG{
 			const std::string NODE_CONFIG 			= "CONFIG.";
@@ -88,7 +88,7 @@ namespace CARNAVICOM{
 	}
 }
 
-const std::string INI_PATH="~/catkin_ws/src/carnavicomlidar_ros/config/";
+const std::string INI_PATH="~/catkin_ws/src/kanavilidar_ros/config/";
 
 
 // struct EIGEN_ALIGN16 Point {
@@ -122,4 +122,4 @@ const std::string INI_PATH="~/catkin_ws/src/carnavicomlidar_ros/config/";
 // 	(uint32_t, rgba, rgba)
 // )
 
-#endif // __CARNAVICOMLIDAR_ROS_H__
+#endif // __KANAVILIDAR_ROS_H__

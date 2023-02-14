@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(carnavicomlidar_ros)
+project(kanavilidar_ros)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++14)
@@ -18,13 +18,13 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(carnavicom_lib carnavicom_lib REQUIRED)
+pkg_check_modules(kanavi_lib kanavi_lib REQUIRED)
 
-message(STATUS "foo include dir: ${carnavicom_lib_INCLUDE_DIRS}")
-message(STATUS "foo lib list: ${carnavicom_lib_LIBRARIES}")
+message(STATUS "foo include dir: ${kanavi_lib_INCLUDE_DIRS}")
+message(STATUS "foo lib list: ${kanavi_lib_LIBRARIES}")
 
 
-# find_package(carnavicom_sdk REQUIRED)
+# find_package(kanavi_sdk REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -117,9 +117,9 @@ message(STATUS "foo lib list: ${carnavicom_lib_LIBRARIES}")
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 	INCLUDE_DIRS include
-	LIBRARIES carnavicomlidar_ros
+	LIBRARIES kanavilidar_ros
 	CATKIN_DEPENDS pcl_conversions pcl_ros roscpp rospy std_msgs visualization_msgs
-	DEPENDS system_lib carnavicom_lib
+	DEPENDS system_lib kanavi_lib
 )
 
 ###########
@@ -132,12 +132,12 @@ catkin_package(
 include_directories(
 	include
 	${catkin_INCLUDE_DIRS}
-	${carnavicom_lib_INCLUDE_DIRS}
+	${kanavi_lib_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/carnavicomLiDAR_ROS.cpp
+#   src/${PROJECT_NAME}/kanaviLiDAR_ROS.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -148,7 +148,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME} src/main.cpp include/carnavicomLiDAR_ROS/carnavi_converter.cpp include/carnavicomLiDAR_ROS/carnavi_converter.h include/carnavicomLiDAR_ROS/config.h)
+add_executable(${PROJECT_NAME} src/main.cpp include/kanaviLiDAR_ROS/kanavi_converter.cpp include/kanaviLiDAR_ROS/kanavi_converter.h include/kanaviLiDAR_ROS/config.h)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -163,7 +163,7 @@ add_executable(${PROJECT_NAME} src/main.cpp include/carnavicomLiDAR_ROS/carnavi_
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
-  ${carnavicom_lib_LIBRARIES}
+  ${kanavi_lib_LIBRARIES}
 )
 
 #############
@@ -213,7 +213,7 @@ target_link_libraries(${PROJECT_NAME}
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_carnavicomLiDAR_ROS.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_kanaviLiDAR_ROS.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

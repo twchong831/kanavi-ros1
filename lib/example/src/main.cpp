@@ -1,5 +1,5 @@
-#include <processor/carnavicomProcessor.h>
-#include <UDP/carnavicom_udp.h>
+#include <processor/kanaviProcessor.h>
+#include <UDP/kanavi_udp.h>
 #include <include/header.h>
 #include <thread>
 #include <pthread.h>
@@ -20,15 +20,15 @@
 
 #endif
 
-void printBuf(carnaviDatagram dg)
+void printBuf(lidarDatagram dg)
 {
 	int line = 0;
 	switch(dg.LiDAR_Model)
 	{
-	case CARNAVICOM::MODEL::LiDAR::VL_AS16:
-		for(int ch=0; ch<CARNAVICOM::VL_AS16::SPECIFICATION::VERTICAL_CHANNEL; ch++)
+	case KANAVI::MODEL::LiDAR::VL_AS16:
+		for(int ch=0; ch<KANAVI::VL_AS16::SPECIFICATION::VERTICAL_CHANNEL; ch++)
 		{
-			for(int i=0; i<CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT; i++)
+			for(int i=0; i<KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT; i++)
 			{
 				printf("[%.2d][%.4d] : %.4d [cm] ", ch, dg.vl_as16.RAWdata_Angle[i], 
 											dg.vl_as16.RAWdata_RadialDistance[ch][i]);
@@ -43,10 +43,10 @@ void printBuf(carnaviDatagram dg)
 			line = 0;
 		}
 		break;
-	case CARNAVICOM::MODEL::LiDAR::VL_R002IF01:
+	case KANAVI::MODEL::LiDAR::VL_R002IF01:
 		for(int ch=0; ch<2; ch++)
 		{
-			for(int i=0; i<CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_DATA_CNT; i++)
+			for(int i=0; i<KANAVI::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_DATA_CNT; i++)
 			{
 				printf("[%.1d][%.3d] : %f [m] ", ch, i, dg.industrial_Length[ch][i]);
 				line++;
@@ -127,7 +127,7 @@ PointXYZ length2Point(float len, float v_sin, float v_cos, float h_sin, float h_
 	return p;
 }
 
-cv::Mat convertMat(carnaviDatagram dg)
+cv::Mat convertMat(lidarDatagram dg)
 {
 	std::vector<PointXYZ> points;
 
@@ -136,28 +136,28 @@ cv::Mat convertMat(carnaviDatagram dg)
 	std::vector<float> h_sin, h_cos;
 	switch(dg.LiDAR_Model)
 	{
-	case CARNAVICOM::MODEL::LiDAR::VL_AS16:
+	case KANAVI::MODEL::LiDAR::VL_AS16:
 		for(int i=0; i<16; i++)
 		{
-			v_sin.push_back( sin(DEG2RAD(CARNAVICOM::VL_AS16::SPECIFICATION::VERTICAL_RESOLUTION * (7 - i))) );
-			v_cos.push_back( cos(DEG2RAD(CARNAVICOM::VL_AS16::SPECIFICATION::VERTICAL_RESOLUTION * (7 - i))) );
+			v_sin.push_back( sin(DEG2RAD(KANAVI::VL_AS16::SPECIFICATION::VERTICAL_RESOLUTION * (7 - i))) );
+			v_cos.push_back( cos(DEG2RAD(KANAVI::VL_AS16::SPECIFICATION::VERTICAL_RESOLUTION * (7 - i))) );
 		}
-		for(int i=0; i<CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT; i++)
+		for(int i=0; i<KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT; i++)
 		{
-			h_sin.push_back( sin(DEG2RAD(CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_RESOLUTION * i)) );
-			h_cos.push_back( cos(DEG2RAD(CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_RESOLUTION * i)) );
+			h_sin.push_back( sin(DEG2RAD(KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_RESOLUTION * i)) );
+			h_cos.push_back( cos(DEG2RAD(KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_RESOLUTION * i)) );
 		}
 		break;
-	case CARNAVICOM::MODEL::LiDAR::VL_R002IF01:
+	case KANAVI::MODEL::LiDAR::VL_R002IF01:
 		for(int i=0; i<2; i++)
 		{
-			v_sin.push_back( sin(DEG2RAD(CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::VERTICAL_RESOLUTION * i)) );
-			v_cos.push_back( cos(DEG2RAD(CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::VERTICAL_RESOLUTION * i)) );
+			v_sin.push_back( sin(DEG2RAD(KANAVI::INDUSTRIAL::SPECIFICATION::R2::VERTICAL_RESOLUTION * i)) );
+			v_cos.push_back( cos(DEG2RAD(KANAVI::INDUSTRIAL::SPECIFICATION::R2::VERTICAL_RESOLUTION * i)) );
 		}
-		for(int i=0; i<CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_DATA_CNT; i++)
+		for(int i=0; i<KANAVI::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_DATA_CNT; i++)
 		{
-			h_sin.push_back( sin(DEG2RAD(CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_RESOLUTION * i)) );
-			h_cos.push_back( cos(DEG2RAD(CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_RESOLUTION * i)) );
+			h_sin.push_back( sin(DEG2RAD(KANAVI::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_RESOLUTION * i)) );
+			h_cos.push_back( cos(DEG2RAD(KANAVI::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_RESOLUTION * i)) );
 		}
 		break;
 	}
@@ -165,20 +165,20 @@ cv::Mat convertMat(carnaviDatagram dg)
 	//convert 3D point
 	switch(dg.LiDAR_Model)
 	{
-	case CARNAVICOM::MODEL::LiDAR::VL_AS16:
+	case KANAVI::MODEL::LiDAR::VL_AS16:
 		for(int ch=0; ch<16; ch++)
 		{
-			for(int i=0; i<CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT; i++)
+			for(int i=0; i<KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT; i++)
 			{
 				points.push_back(length2Point(dg.RAWdata_RadialDistance[ch][i]/100.0, v_sin[ch], v_cos[ch],
 											h_sin[i], h_cos[i]));
 			}
 		}
 		break;
-	case CARNAVICOM::MODEL::LiDAR::VL_R002IF01:
+	case KANAVI::MODEL::LiDAR::VL_R002IF01:
 		for(int ch=0; ch<2; ch++)
 		{
-			for(int i=0; i<CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_DATA_CNT; i++)
+			for(int i=0; i<KANAVI::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_DATA_CNT; i++)
 			{
 				points.push_back(length2Point(dg.industrial_Length[ch][i], v_sin[ch], v_cos[ch],
 											h_sin[i], h_cos[i]));
@@ -209,13 +209,13 @@ cv::Mat convertMat(carnaviDatagram dg)
 /**
 * @mainpage main.cpp
 * @brief    LiDAR 프로세서 동작을 확인하기 위한 main
-* @details  carnavicomLidarProcessor를 통한 데이터 처리를 확인
+* @details  kanaviLidarProcessor를 통한 데이터 처리를 확인
 */
 int main(int argc, char* argv[])
 {
-	carnavicomLidarProcessor *m_carnaviLidar;
-	m_carnaviLidar = new carnavicomLidarProcessor;
-	CarnavicomUDP *m_udp = new CarnavicomUDP;
+	kanaviLidarProcessor *m_KanaviLidar;
+	m_KanaviLidar = new kanaviLidarProcessor;
+	kanaviUDP *m_udp = new kanaviUDP;
 
 	std::string udpIP = "192.168.100.99";
 	int udpPort = 5000;
@@ -266,7 +266,7 @@ int main(int argc, char* argv[])
 	}
 
 	std::vector<u_char> recv_buf;	//udp recv buf;
-	carnaviDatagram datagram;
+	lidarDatagram datagram;
 
 	while(1)
 	{
@@ -275,7 +275,7 @@ int main(int argc, char* argv[])
 		recv_buf = m_udp->getData();
 		// printf("check input buf : %d\n", recv_buf.size());
 
-		datagram = m_carnaviLidar->process(recv_buf);
+		datagram = m_KanaviLidar->process(recv_buf);
 		// printf("Model : %d\n", datagram.LiDAR_Model);
 #ifdef OPENCV_
 		//output

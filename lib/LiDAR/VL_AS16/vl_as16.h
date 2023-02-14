@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Carnavicom.co.,ltd.
+ * Copyright (c) 2022, Kanavi-Mobility.co.,ltd.
  * All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without
@@ -33,8 +33,8 @@
 
 /**
  * @file vl_as16.h
- * @author twchong (twchong@carnavi.com)
- * @brief to processing Carnavicom LiDAR sensor of VL-AS16
+ * @author twchong (twchong@Kanavi.com)
+ * @brief to processing Kanavi-Mobility LiDAR sensor of VL-AS16
  * @version 0.1
  * @date 2022-07-01
  * 
@@ -50,17 +50,17 @@ public:
     VL_AS16();
 	~VL_AS16();
 
-    void processor(const std::vector<u_char> &data, carnaviDatagram &datagram);
+    void processor(const std::vector<u_char> &data, lidarDatagram &datagram);
 
 private:
 
-    void sortData(const std::vector<u_char> &data, carnaviDatagram &protocol);
-    void sortData_SET02(const std::vector<u_char> &data, carnaviDatagram &protocol);
-    void sortData_SET03(const std::vector<u_char> &data, carnaviDatagram &protocol);
+    void sortData(const std::vector<u_char> &data, lidarDatagram &protocol);
+    void sortData_SET02(const std::vector<u_char> &data, lidarDatagram &protocol);
+    void sortData_SET03(const std::vector<u_char> &data, lidarDatagram &protocol);
 
-    void sortLength(const std::vector<u_char> &data, carnaviDatagram &protocol);
-    void sortOBJ(const std::vector<u_char> &data, carnaviDatagram &protocol, const size_t &startPos);
-    void sortEnW(const std::vector<u_char> &data, carnaviDatagram &protocol);
+    void sortLength(const std::vector<u_char> &data, lidarDatagram &protocol);
+    void sortOBJ(const std::vector<u_char> &data, lidarDatagram &protocol, const size_t &startPos);
+    void sortEnW(const std::vector<u_char> &data, lidarDatagram &protocol);
 
     int FUNC_HEXtoDEC(u_char up, u_char down);
     int FUNC_HEX2DEX_Length(u_char up, u_char down);
@@ -68,12 +68,12 @@ private:
 
     uint16_t each8to16(u_char up, u_char down);
 
-	const int SIZE_HEAD2LENGTH = static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_SIZE::HEAD)
-							+ static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_SIZE::TARGET_ID)
-							+ static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_SIZE::SOURCE_ID)
-							+ static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_SIZE::COMMAND)
-							+ static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_SIZE::PARAMETER)
-							+ static_cast<int>(CARNAVICOM::VL_AS16::PROTOCOL_SIZE::DATALENGTH);	//14
+	const int SIZE_HEAD2LENGTH = static_cast<int>(KANAVI::VL_AS16::PROTOCOL_SIZE::HEAD)
+							+ static_cast<int>(KANAVI::VL_AS16::PROTOCOL_SIZE::TARGET_ID)
+							+ static_cast<int>(KANAVI::VL_AS16::PROTOCOL_SIZE::SOURCE_ID)
+							+ static_cast<int>(KANAVI::VL_AS16::PROTOCOL_SIZE::COMMAND)
+							+ static_cast<int>(KANAVI::VL_AS16::PROTOCOL_SIZE::PARAMETER)
+							+ static_cast<int>(KANAVI::VL_AS16::PROTOCOL_SIZE::DATALENGTH);	//14
 };
 
 #endif // VL_AS16_H

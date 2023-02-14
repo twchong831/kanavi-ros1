@@ -5,7 +5,7 @@ SRC_HOME=./
 INC_HOME=.
 
 #Library Name
-LIB_BASIC:=libCarnavi_VL_AS16
+LIB_BASIC:=libKanavi_VL_AS16
 LIB_NAME:=
 CXXFLAGS:=
 CFLAGS:=-g -std=c++11 -I${SRC_HOME} -c -Wno-deprecated -fPIC

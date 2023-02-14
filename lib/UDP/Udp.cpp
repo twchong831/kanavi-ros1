@@ -1,6 +1,6 @@
-#include "carnavicom_udp.h"
+#include "Udp.h"
 
-CarnavicomUDP::CarnavicomUDP()
+kanaviUDP::kanaviUDP()
 {
     g_UDP_Multicast = false;
     g_localIP = "192.168.100.99";
@@ -19,7 +19,7 @@ CarnavicomUDP::CarnavicomUDP()
  * @param multicast_IP 	UDP multicast IP
  * @param checked 		multicast true/false
  */
-void CarnavicomUDP::setMulticast(const std::string &multicast_IP, bool checked)
+void kanaviUDP::setMulticast(const std::string &multicast_IP, bool checked)
 {
     g_UDP_Multicast = checked;
     if(checked)
@@ -34,7 +34,7 @@ void CarnavicomUDP::setMulticast(const std::string &multicast_IP, bool checked)
  * @param IP 	UDP ip address
  * @param port 	UDP port number.
  */
-void CarnavicomUDP::InitUDP(const std::string &IP, const int &port)
+void kanaviUDP::InitUDP(const std::string &IP, const int &port)
 {
     g_localIP = IP;
     g_UDP_PORT = port;
@@ -84,7 +84,7 @@ void CarnavicomUDP::InitUDP(const std::string &IP, const int &port)
  * @return true
  * @return false 
  */
-bool CarnavicomUDP::connect()
+bool kanaviUDP::connect()
 {
 // #ifndef CONNECTED_UDP
     if(bind(g_udpSocket, (struct sockaddr*)&g_udpAddr, sizeof(g_udpAddr)) == -1)
@@ -111,7 +111,7 @@ bool CarnavicomUDP::connect()
  * 
  * @return int 
  */
-int CarnavicomUDP::disconnect()
+int kanaviUDP::disconnect()
 {
     printf("[UDP][DISCONNECT]\n");
     return close(g_udpSocket);
@@ -122,7 +122,7 @@ int CarnavicomUDP::disconnect()
  * 
  * @return std::vector<u_char> 
  */
-std::vector<u_char> CarnavicomUDP::getData()
+std::vector<u_char> kanaviUDP::getData()
 {
     memset(&g_SenderAddr, 0, sizeof(struct sockaddr_in));
     socklen_t lidarAddress_length = sizeof(g_SenderAddr);
@@ -180,7 +180,7 @@ std::vector<u_char> CarnavicomUDP::getData()
  * 
  * @param send_data send data
  */
-void CarnavicomUDP::sendData(std::vector<u_char> send_data)
+void kanaviUDP::sendData(std::vector<u_char> send_data)
 {
     int res;
     if(send_data.size() <= BUFFER_SIZE)
@@ -240,7 +240,7 @@ void CarnavicomUDP::sendData(std::vector<u_char> send_data)
  * @param data send data
  * @param size send data array size
  */
-void CarnavicomUDP::sendData(u_char data[], int size)
+void kanaviUDP::sendData(u_char data[], int size)
 {
     {
         if(sendto(g_udpSocket, data, size, 0, (struct sockaddr*)& g_udpAddr, sizeof(g_udpAddr)) == -1)
@@ -255,7 +255,7 @@ void CarnavicomUDP::sendData(u_char data[], int size)
  * 
  * @param lidarIP 
  */
-void CarnavicomUDP::setLidarIP(const std::string &IP)
+void kanaviUDP::setLidarIP(const std::string &IP)
 {
     g_inputLidar_IP = IP;
     g_checkLiDAR_IP = true;
@@ -266,7 +266,7 @@ void CarnavicomUDP::setLidarIP(const std::string &IP)
  * 
  * @return std::string 
  */
-std::string CarnavicomUDP::getLidarIP()
+std::string kanaviUDP::getLidarIP()
 {
     return g_getLidar_IP;
 }
@@ -275,7 +275,7 @@ std::string CarnavicomUDP::getLidarIP()
  * @brief run udp thread
  * 
  */
-void CarnavicomUDP::run()
+void kanaviUDP::run()
 {
 	g_th_loop_recv = true;
 	g_th_loop_send = true;
@@ -283,21 +283,21 @@ void CarnavicomUDP::run()
 
 	g_th_temp_buf.clear();
 
-	th_recv = std::thread(&CarnavicomUDP::th_recv_loop, this);
-	th_send = std::thread(&CarnavicomUDP::sendDatagram, this);
+	th_recv = std::thread(&kanaviUDP::th_recv_loop, this);
+	th_send = std::thread(&kanaviUDP::sendDatagram, this);
 }
 
 /**
  * @brief end udp thread
  * 
  */
-void CarnavicomUDP::end()
+void kanaviUDP::end()
 {
 	g_th_loop_recv = false;
 	g_th_loop_send = false;
 }
 
-std::vector<u_char> CarnavicomUDP::th_getBuf()
+std::vector<u_char> kanaviUDP::th_getBuf()
 {
 	std::vector<u_char> buf_;
 	getTempBuf(buf_);
@@ -311,7 +311,7 @@ std::vector<u_char> CarnavicomUDP::th_getBuf()
  * @param byf_ 
  * @param size_ 
  */
-void CarnavicomUDP::th_setSendBuf(u_char* byf_, const int &size_)
+void kanaviUDP::th_setSendBuf(u_char* byf_, const int &size_)
 {
 	
 }
@@ -320,7 +320,7 @@ void CarnavicomUDP::th_setSendBuf(u_char* byf_, const int &size_)
  * @brief thread function for udp recv thread
  * 
  */
-void CarnavicomUDP::th_recv_loop()
+void kanaviUDP::th_recv_loop()
 {
 	// printf("[udp]")
 
@@ -369,12 +369,12 @@ void CarnavicomUDP::th_recv_loop()
 	}
 }
 
-void CarnavicomUDP::sendDatagram()
+void kanaviUDP::sendDatagram()
 {
 	
 }
 
-void CarnavicomUDP::getData_fromUDP(std::vector<u_char> & data)
+void kanaviUDP::getData_fromUDP(std::vector<u_char> & data)
 {
 	u_char buf_[BUFFER_SIZE];
 	memset(&buf_, 0, BUFFER_SIZE);
@@ -391,7 +391,7 @@ void CarnavicomUDP::getData_fromUDP(std::vector<u_char> & data)
 	g_getLidar_IP = inet_ntoa(g_SenderAddr.sin_addr);
 }
 
-void CarnavicomUDP::getData_fromUDP(u_char buf_[], int &size)
+void kanaviUDP::getData_fromUDP(u_char buf_[], int &size)
 {
 	// u_char buf_[BUFFER_SIZE];
 	// memset(&buf_, 0, BUFFER_SIZE);
@@ -406,7 +406,7 @@ void CarnavicomUDP::getData_fromUDP(u_char buf_[], int &size)
 	g_getLidar_IP = inet_ntoa(g_SenderAddr.sin_addr);
 }
 
-void CarnavicomUDP::eraseVector(const std::vector<int> &er_num_,
+void kanaviUDP::eraseVector(const std::vector<int> &er_num_,
 								std::vector<TEMP_UDP_BUF> &vec_)
 {
 	if(er_num_.size() > 0 && 
@@ -425,12 +425,12 @@ void CarnavicomUDP::eraseVector(const std::vector<int> &er_num_,
 	}
 }
 
-void CarnavicomUDP::eraseElement(const int &num, std::vector<TEMP_UDP_BUF> &vec_)
+void kanaviUDP::eraseElement(const int &num, std::vector<TEMP_UDP_BUF> &vec_)
 {
 	vec_.erase(vec_.begin() + num);
 }
 
-void CarnavicomUDP::setTempBuf(const TEMP_UDP_BUF &pair_)
+void kanaviUDP::setTempBuf(const TEMP_UDP_BUF &pair_)
 {
 	// erase elements vector
 	std::vector<int> erase_num_vec;
@@ -472,7 +472,7 @@ void CarnavicomUDP::setTempBuf(const TEMP_UDP_BUF &pair_)
 	}
 }
 
-void CarnavicomUDP::setTempBuf(const std::vector<u_char> &buf_)
+void kanaviUDP::setTempBuf(const std::vector<u_char> &buf_)
 {
 	if(g_th_temp_group_buf.size() == 0)
 	{
@@ -499,7 +499,7 @@ void CarnavicomUDP::setTempBuf(const std::vector<u_char> &buf_)
 	}
 }
 
-void CarnavicomUDP::setTempBuf(u_char buf_[], const int &size_)
+void kanaviUDP::setTempBuf(u_char buf_[], const int &size_)
 {
 	for(int i=g_checked_temp_buf_size; i<g_checked_temp_buf_size+size_; i++)
 	{
@@ -520,7 +520,7 @@ void CarnavicomUDP::setTempBuf(u_char buf_[], const int &size_)
 	}	
 }
 
-void CarnavicomUDP::getTempBuf(std::vector<u_char> &buf_)
+void kanaviUDP::getTempBuf(std::vector<u_char> &buf_)
 {
 	// if(g_th_temp_recv_buf.size() != 0)
 	if(g_th_recv_ready)
@@ -532,7 +532,7 @@ void CarnavicomUDP::getTempBuf(std::vector<u_char> &buf_)
 	// return g_th_temp_buf;
 }
 
-void CarnavicomUDP::setNcheckUDPBufSize()
+void kanaviUDP::setNcheckUDPBufSize()
 {
 	int send_size;
 	socklen_t opt_size = sizeof(send_size);

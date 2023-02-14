@@ -2,7 +2,7 @@ prefix=/usr/local
 LIB_PATH=${prefix}/lib
 
 INC_HOME=${prefix}/include
-INC_PATH=${INC_HOME}/CARNAVICOM_LIB
+INC_PATH=${INC_HOME}/KANAVI_LIB
 
 PKG_PATH=${LIB_PATH}/pkgconfig
 
@@ -72,5 +72,5 @@ clean:
 
 remove:
 	sudo rm -rf ${INC_PATH}
-	sudo rm ${LIB_PATH}/libCarnavi*
-	sudo rm ${PKG_PATH}/carnavicom_lib.pc
+	sudo rm ${LIB_PATH}/libKanavi*
+	sudo rm ${PKG_PATH}/kanavi_lib.pc

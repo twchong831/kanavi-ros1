@@ -1,4 +1,4 @@
-# Carnavicom co.,ltd. LiDAR LIB
+# Kanavi-Mobility co.,ltd. LiDAR LIB
 
 ## Development ENV
 
@@ -19,17 +19,17 @@
 | ⬜️   | VL-R004IK01     | 4ch 90&deg; LiDAR Sensor?        |
 | ✅   | **VL-R004IK02** | 4ch 90&deg; LiDAR Sensor (R4)    |
 
-## How to build Carnavicom LiDAR LIB
+## How to build Kanavi-Mobility LiDAR LIB
 
 ```powershell
-make all  # install carnavicom LIB
+make all  # install kanavi LIB
 ```
 
 ### where LIB
 
 ```powershell
 /usr/local/lib
-/usr/local/include/CARNAVICOM_LIB
+/usr/local/include/KANAVI_LIB
 ```
 
 ### Hot to Remove
@@ -44,7 +44,7 @@ make remove
 ./example/src
 ```
 
-- Displaying LiDAR data in top view using Carnavicom LIB and opencv.
+- Displaying LiDAR data in top view using Kanavi-Mobility LIB and opencv.
 
 ## Update List
 

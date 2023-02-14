@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Carnavicom.co.,ltd.
+ * Copyright (c) 2022, Kanavi-Mobility.co.,ltd.
  * All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without
@@ -33,8 +33,8 @@
 
 /**
  * @file lidarParser.h
- * @author twchong (twchong@carnavi.com)
- * @brief to classify and parse Carnavicom LiDAR sensor.
+ * @author twchong (twchong@Kanavi.com)
+ * @brief to classify and parse Kanavi-Mobility LiDAR sensor.
  * @version 0.1
  * @date 2022-07-01
  * 
@@ -57,7 +57,7 @@ public:
     bool setData(const std::vector<u_char> &data);
     int getLidarModel();
 
-    void getLiDARdatagram(carnaviDatagram &datagram);
+    void getLiDARdatagram(lidarDatagram &datagram);
 
     size_t getRawDataSize();
     std::vector<u_char> getRawData();
@@ -78,12 +78,12 @@ private:
 	bool process_R4(const std::vector<u_char> &data);
 
     //parsing -- method
-	void parsingRawData(const std::vector<u_char> &data, carnaviDatagram &datagram);
-	void parsingRawData_industrial(const std::vector<u_char> &data, carnaviDatagram &datagram);
+	void parsingRawData(const std::vector<u_char> &data, lidarDatagram &datagram);
+	void parsingRawData_industrial(const std::vector<u_char> &data, lidarDatagram &datagram);
 
     //variable
     std::string g_LiDARModel;
-    carnaviDatagram protocolDatagram;
+    lidarDatagram protocolDatagram;
 
     //lidar data buffer
     std::vector<u_char> g_lidarBuffer;
@@ -108,7 +108,7 @@ private:
     double horizontal_COS[1160];
 
     //set previous datagram & partial update
-    carnaviDatagram previousDatagram;
+    lidarDatagram previousDatagram;
     bool g_checked_preDatagramSet;
     int g_cntForAllData;
 

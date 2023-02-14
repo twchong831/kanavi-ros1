@@ -3,13 +3,13 @@
 SRC_HOME=./
 
 #Library Name
-LIB_BASIC:=libCarnaviProcessor
+LIB_BASIC:=libKanaviProcessor
 LIB_NAME:=
 LIB_PATH=../bin
 #define Include Path
 INC_HOME=.
 
-LIBS=-L${LIB_PATH} -lCarnaviUDP -lCarnaviParser -lCarnavi_VL_AS16
+LIBS=-L${LIB_PATH} -lKanaviUDP -lKanaviParser -lKanavi_VL_AS16
 
 #compile flags
 #CFLAGS: C compile flag
@@ -44,7 +44,7 @@ vpath %.h	${SRC_HOME}
 #static link(?) NAME
 SRCS=$(wildcard *.cpp)
 OBJS=$(SRCS:.cpp=.o)
-# OBJS=carnavicomProcessor.o
+# OBJS=kanaviProcessor.o
 
 #command --all
 all: ${LIB_NAME}	#dependency *.so file -> 1.

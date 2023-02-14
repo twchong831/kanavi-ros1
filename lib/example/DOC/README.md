@@ -1,20 +1,18 @@
-# 카네비컴 SDK
+# Kanavi-Mobility LIBS
 
-## SDK compile
+## LIB compile
 
 ```sh
-cd CARNAICOM_SDK
-make all	# /usr/lib/CARNAVICOM_SDK, /usr/include/CARNAVICOM_SDK에 copy
+cd lib
+make install	# /usr/lib/KANAVI_SDK, /usr/include/KANAVI_SDK에 copy
 ```
-
-
 
 ## exameple 구동
 
 ### OPENCV 사용 시
 
 ```sh
-# CARNAVICOM_SDK/example/src/Makefile 수정
+# KANAVI_SDK/example/src/Makefile 수정
 OPENCV_PATH, OPENCV_LIB 활성화
 
 # main.cpp
@@ -24,14 +22,12 @@ OPENCV_PATH, OPENCV_LIB 활성화
 ### OPENCV 미사용 시
 
 ```sh
-# CARNAVICOM_SDK/example/src/Makefile 수정
+# KANAVI_SDK/example/src/Makefile 수정
 OPENCV_PATH, OPENCV_LIB 비활성화
 
 # main.cpp
 #define OPENCV_ 비활성화
 ```
-
-
 
 ### 구동
 

@@ -13,25 +13,25 @@ industrialLiDAR::~industrialLiDAR()
 }
 
 /**
- * @brief to process Carnavicom Industrial LiDAR sensor
+ * @brief to process Kanavi-Mobility Industrial LiDAR sensor
  * 
  * @param input 	datagram of LiDAR raw data
- * @param output 	protocol structure of Carnavicom LiDAR sensor
+ * @param output 	protocol structure of Kanavi-Mobility LiDAR sensor
  */
-void industrialLiDAR::process(const std::vector<u_char> &input, carnaviDatagram &output)
+void industrialLiDAR::process(const std::vector<u_char> &input, lidarDatagram &output)
 {
 	//sort length
 	if(input.size() > 0)
 	{
-		switch(input[CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_POS::PRODUCT_LINE])
+		switch(input[KANAVI::INDUSTRIAL::COMMON::PROTOCOL_POS::PRODUCT_LINE])
 		{
-		case CARNAVICOM::MODEL::LiDAR::VL_R002IF01:
+		case KANAVI::MODEL::LiDAR::VL_R002IF01:
 			R2(input, output);
 			break;
-		case CARNAVICOM::MODEL::LiDAR::VL_R001IK02:
+		case KANAVI::MODEL::LiDAR::VL_R001IK02:
 			R300(input, output);
 			break;
-		case CARNAVICOM::MODEL::LiDAR::VL_R004IK02:
+		case KANAVI::MODEL::LiDAR::VL_R004IK02:
 			R4(input, output);
 			break;
 		}
@@ -42,13 +42,13 @@ void industrialLiDAR::process(const std::vector<u_char> &input, carnaviDatagram 
  * @brief to parse raw data to length value
  * 
  * @param input 	datagram of LiDAR raw data
- * @param output 	protocol structure of Carnavicom LiDAR sensor
+ * @param output 	protocol structure of Kanavi-Mobility LiDAR sensor
  * @param ch 		now length data's channel
  */
-void industrialLiDAR::parseLength(const std::vector<u_char> &input, carnaviDatagram &output, int ch)
+void industrialLiDAR::parseLength(const std::vector<u_char> &input, lidarDatagram &output, int ch)
 {
-	int start = CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_POS::RAWDATA_START;
-	int end = input.size() - CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_SIZE::CHECKSUM;
+	int start = KANAVI::INDUSTRIAL::COMMON::PROTOCOL_POS::RAWDATA_START;
+	int end = input.size() - KANAVI::INDUSTRIAL::COMMON::PROTOCOL_SIZE::CHECKSUM;
 
 	float up = 0;
 	float low = 0;
@@ -68,40 +68,40 @@ void industrialLiDAR::parseLength(const std::vector<u_char> &input, carnaviDatag
 }
 
 /**
- * @brief to process Carnavicom industrial LiDAR sensor VL-R002IK01(R2)
+ * @brief to process Kanavi-Mobility industrial LiDAR sensor VL-R002IK01(R2)
  * 
  * @param input 	datagram of LiDAR raw data
- * @param output 	protocol structure of Carnavicom LiDAR sensor
+ * @param output 	protocol structure of Kanavi-Mobility LiDAR sensor
  */
-void industrialLiDAR::R2(const std::vector<u_char> &input, carnaviDatagram &output)
+void industrialLiDAR::R2(const std::vector<u_char> &input, lidarDatagram &output)
 {
-	u_char mode = input[static_cast<int>(CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_POS::COMMAND::MODE)];
-	u_char ch = input[static_cast<int>(CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_POS::COMMAND::PARAMETER)];
+	u_char mode = input[static_cast<int>(KANAVI::INDUSTRIAL::COMMON::PROTOCOL_POS::COMMAND::MODE)];
+	u_char ch = input[static_cast<int>(KANAVI::INDUSTRIAL::COMMON::PROTOCOL_POS::COMMAND::PARAMETER)];
 
-	if(mode == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::COMMAND::MODE::DISTANCE_DATA)
+	if(mode == KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::COMMAND::MODE::DISTANCE_DATA)
 	{
 		// check ch 0 data input
-		if(ch == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_0)
+		if(ch == KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_0)
 		{
 			// printf("[industrial][input CH0]\n");
 			// output.clear();
 			//set specification
 			{
-				output.LiDAR_Model = CARNAVICOM::MODEL::LiDAR::VL_R002IF01;
+				output.LiDAR_Model = KANAVI::MODEL::LiDAR::VL_R002IF01;
 				output.PARA_Vertical_Resolution 
-					= CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::VERTICAL_RESOLUTION;
+					= KANAVI::INDUSTRIAL::SPECIFICATION::R2::VERTICAL_RESOLUTION;
 				output.PARA_Horizontal_Resolution
-					= CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_RESOLUTION;
+					= KANAVI::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_RESOLUTION;
 				output.PARA_Start_Angle = 0;
 				output.PARA_End_Angle 
-					= CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_DATA_CNT;
+					= KANAVI::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_DATA_CNT;
 			}
 				
 			parseLength(input, output, static_cast<int>(ch & 0x0F));
 
 			g_checked_CH[0] = true;
 		}
-		else if(ch == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_1)	//check ch 1 data input
+		else if(ch == KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_1)	//check ch 1 data input
 		{
 			// printf("[industrial][input CH1]\n");
 			if(g_checked_CH[0])
@@ -115,32 +115,32 @@ void industrialLiDAR::R2(const std::vector<u_char> &input, carnaviDatagram &outp
 }
 
 /**
- * @brief to process Carnavicom industrial LiDAR sensor VL-R001IK02(R300)
+ * @brief to process Kanavi-Mobility industrial LiDAR sensor VL-R001IK02(R300)
  * 
  * @param input		datagram of LiDAR raw data
- * @param output	protocol structure of Carnavicom LiDAR sensor
+ * @param output	protocol structure of Kanavi-Mobility LiDAR sensor
  */
-void industrialLiDAR::R300(const std::vector<u_char> &input, carnaviDatagram &output)
+void industrialLiDAR::R300(const std::vector<u_char> &input, lidarDatagram &output)
 {
-	u_char mode = input[static_cast<int>(CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_POS::COMMAND::MODE)];
-	u_char ch = input[static_cast<int>(CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_POS::COMMAND::PARAMETER)];
+	u_char mode = input[static_cast<int>(KANAVI::INDUSTRIAL::COMMON::PROTOCOL_POS::COMMAND::MODE)];
+	u_char ch = input[static_cast<int>(KANAVI::INDUSTRIAL::COMMON::PROTOCOL_POS::COMMAND::PARAMETER)];
 
-	if(mode == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::COMMAND::MODE::DISTANCE_DATA)
+	if(mode == KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::COMMAND::MODE::DISTANCE_DATA)
 	{
 		//check ch 0 data input
-		if(ch == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_0)
+		if(ch == KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_0)
 		{
 			// output.clear();
 			//set specification
 			{
-				output.LiDAR_Model = CARNAVICOM::MODEL::LiDAR::VL_R001IK02;
+				output.LiDAR_Model = KANAVI::MODEL::LiDAR::VL_R001IK02;
 				output.PARA_Vertical_Resolution 
-					= CARNAVICOM::INDUSTRIAL::SPECIFICATION::R300::VERTICAL_RESOLUTION;
+					= KANAVI::INDUSTRIAL::SPECIFICATION::R300::VERTICAL_RESOLUTION;
 				output.PARA_Horizontal_Resolution
-					= CARNAVICOM::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_RESOLUTION;
+					= KANAVI::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_RESOLUTION;
 				output.PARA_Start_Angle = 0;
 				output.PARA_End_Angle 
-					= CARNAVICOM::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_DATA_CNT;
+					= KANAVI::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_DATA_CNT;
 			}
 				
 			parseLength(input, output, static_cast<int>(ch & 0x0F));	// convert byte to length
@@ -150,43 +150,43 @@ void industrialLiDAR::R300(const std::vector<u_char> &input, carnaviDatagram &ou
 }
 
 /**
- * @brief to process Carnavicom industrial LiDAR sensor VL-R00(R4)
+ * @brief to process Kanavi-Mobility industrial LiDAR sensor VL-R00(R4)
  * 
  * @param input 	datagram of LiDAR raw data
- * @param output 	protocol structure of Carnavicom LiDAR sensor
+ * @param output 	protocol structure of Kanavi-Mobility LiDAR sensor
  */
-void industrialLiDAR::R4(const std::vector<u_char> &input, carnaviDatagram &output)
+void industrialLiDAR::R4(const std::vector<u_char> &input, lidarDatagram &output)
 {
-	u_char mode = input[static_cast<int>(CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_POS::COMMAND::MODE)];
-	u_char ch = input[static_cast<int>(CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_POS::COMMAND::PARAMETER)];
+	u_char mode = input[static_cast<int>(KANAVI::INDUSTRIAL::COMMON::PROTOCOL_POS::COMMAND::MODE)];
+	u_char ch = input[static_cast<int>(KANAVI::INDUSTRIAL::COMMON::PROTOCOL_POS::COMMAND::PARAMETER)];
 	
 	printf("R4 processing...[%X]\n", ch);
 
-	if(mode == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::COMMAND::MODE::DISTANCE_DATA)
+	if(mode == KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::COMMAND::MODE::DISTANCE_DATA)
 	{
-		if(ch == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_0)
+		if(ch == KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_0)
 		{
 			{
-				output.LiDAR_Model = CARNAVICOM::MODEL::LiDAR::VL_R004IK02;
+				output.LiDAR_Model = KANAVI::MODEL::LiDAR::VL_R004IK02;
 				output.PARA_Vertical_Resolution 
-					= CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_RESOLUTION;
+					= KANAVI::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_RESOLUTION;
 				output.PARA_Horizontal_Resolution
-					= CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_RESOLUTION;
+					= KANAVI::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_RESOLUTION;
 				output.PARA_Start_Angle = 0;
 				output.PARA_End_Angle 
-					= CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_DATA_CNT;
+					= KANAVI::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_DATA_CNT;
 			}
 			g_checked_CH[0] = true;
 		}
-		else if(ch == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_1)	//check ch 1 data input
+		else if(ch == KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_1)	//check ch 1 data input
 		{
 			g_checked_CH[1] = true;
 		}
-		else if(ch == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_2)	//check ch 2 data input
+		else if(ch == KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_2)	//check ch 2 data input
 		{
 			g_checked_CH[2] = true;
 		}
-		else if(ch == CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_3)	//check ch 3 data input
+		else if(ch == KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::CHANNEL::CHANNEL_3)	//check ch 3 data input
 		{
 			g_checked_CH[3] = true;
 		}
