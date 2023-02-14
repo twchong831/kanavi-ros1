@@ -32,7 +32,7 @@ make all  # install kanavi LIB
 /usr/local/include/KANAVI_LIB
 ```
 
-### Ho to Remove
+### How to Remove
 
 ```powershell
 make remove
