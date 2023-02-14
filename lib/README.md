@@ -17,7 +17,7 @@
 | ✅   | **VL-R002IK01** | 2ch 120&deg; LiDAR Sensor (R2)   |
 | ✅   | **VL-R001IK02** | 1ch 300&deg; LiDAR Sensor (R300) |
 | ⬜️   | VL-R004IK01     | 4ch 90&deg; LiDAR Sensor?        |
-| ✅   | **VL-R004IK02** | 4ch 90&deg; LiDAR Sensor (R4)    |
+| ✅   | **VL-R004IK02** | 4ch 100&deg; LiDAR Sensor (R4)    |
 
 ## How to build Kanavi-Mobility LiDAR LIB
 
