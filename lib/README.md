@@ -51,4 +51,5 @@ make remove
 - 2022.06.01 First Generated
 - 2022.07.05 add LICENSE
 - 2023.01.25 support MAC os
-- add FUNC. for VL-R004IK02 (R4)
+- 2023.02.13 add FUNC. for VL-R004IK02 (R4)
+- 2023.02.14 update all Compayname(carnavicom to kanavi-mobility)
