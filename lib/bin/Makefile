@@ -19,5 +19,5 @@ clean:
 
 all:
 	echo  "nothing"
-#	sudo mkdir /usr/lib/CARNAVICOM
-#	sudo cp *.so /usr/lib/CARNAVICOM
+#	sudo mkdir /usr/lib/KANAVI
+#	sudo cp *.so /usr/lib/KANAVI

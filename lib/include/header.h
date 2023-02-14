@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Carnavicom.co.,ltd.
+ * Copyright (c) 2022, Kanavi-Mobility.co.,ltd.
  * All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 /**
  * @file header.h
- * @author twchong (twchong@carnavi.com)
+ * @author twchong (twchong@Kanavi.com)
  * @brief 
  * @version 0.1
  * @date 2022-07-05
@@ -60,8 +60,8 @@
 
 #define BUFFER_SIZE 65000
 
-#define INDUSTRAL_MAX_CH	CARNAVICOM::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_CHANNEL
-#define INDUSTRAL_MAX_CNT	CARNAVICOM::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_DATA_CNT
+#define INDUSTRAL_MAX_CH	KANAVI::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_CHANNEL
+#define INDUSTRAL_MAX_CNT	KANAVI::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_DATA_CNT
 
 typedef struct pointXYZ{
     float x;
@@ -96,10 +96,10 @@ typedef struct vl_as16_
     uint8_t     HEADER_NTPTime[8];  //[11~18]
     uint8_t     HEADER_reserved1;   //[19]
 
-    int		RAWdata_Angle[CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT];
-	int		RAWdata_RadialDistance[16][CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT];
-	int		RAWdata_Intensity[16][CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT];
-    int		RAWdata_reserved[CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT];
+    int		RAWdata_Angle[KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT];
+	int		RAWdata_RadialDistance[16][KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT];
+	int		RAWdata_Intensity[16][KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT];
+    int		RAWdata_reserved[KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT];
 
     int                     OBJ_CNT;
     std::vector<uint8_t>	OBJ_ID;
@@ -155,12 +155,12 @@ typedef struct vl_as16_
 	}
 
 	void clear() {
-		memset(RAWdata_Angle, 0, CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT);
-        memset(RAWdata_reserved, 0, CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT);
+		memset(RAWdata_Angle, 0, KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT);
+        memset(RAWdata_reserved, 0, KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT);
 		for(int i=0; i<16; i++)
 		{
-			memset(RAWdata_RadialDistance[i], 0, CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT);
-			memset(RAWdata_Intensity[i], 0, CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT);
+			memset(RAWdata_RadialDistance[i], 0, KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT);
+			memset(RAWdata_Intensity[i], 0, KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT);
 		}
 
         OBJ_ID.clear();
@@ -184,7 +184,7 @@ typedef struct vl_as16_
 }VL_AS16_Datagram;
 
 
-typedef struct carnavi_datagram {
+typedef struct lidar_datagram {
     int         LiDAR_Model;								// lidar model
     double      PARA_Vertical_Resolution;					// vertical resolution
     double      PARA_Horizontal_Resolution;					// horizontal resolution
@@ -201,10 +201,10 @@ typedef struct carnavi_datagram {
 	// industrial
 	float industrial_Length[INDUSTRAL_MAX_CH][INDUSTRAL_MAX_CNT];	// industrial LiDAR buf
 
-    carnavi_datagram() {
+    lidar_datagram() {
         LiDAR_Model = -1;
-        PARA_Vertical_Resolution = CARNAVICOM::VL_AS16::SPECIFICATION::VERTICAL_RESOLUTION;
-        PARA_Horizontal_Resolution = CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_RESOLUTION;
+        PARA_Vertical_Resolution = KANAVI::VL_AS16::SPECIFICATION::VERTICAL_RESOLUTION;
+        PARA_Horizontal_Resolution = KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_RESOLUTION;
         PARA_Start_Angle    = 0;
         PARA_End_Angle      = 1159;
         PARA_Input_END      = false;
@@ -226,6 +226,6 @@ typedef struct carnavi_datagram {
         PARA_Input_END = false;
     }
 
-}carnaviDatagram;
+}lidarDatagram;
 
 #endif // HEADER_H_H

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Carnavicom.co.,ltd.
+ * Copyright (c) 2022, Kanavi-Mobility.co.,ltd.
  * All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 /**
  * @file lidar_spec.h
- * @author twchong (twchong@carnavi.com)
+ * @author twchong (twchong@Kanavi.com)
  * @brief 
  * @version 0.1
  * @date 2022-07-05
@@ -42,7 +42,7 @@
  * 
  */
 
-namespace CARNAVICOM {
+namespace KANAVI {
 	enum PARSE_MODE{
 		LENGTH,
 		COORDINATE

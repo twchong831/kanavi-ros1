@@ -7,7 +7,7 @@ LIB_PATH=../lib
 CHECK_RESULT=$(shell cat ~/.bashrc | grep catkin_ws/devel/setup.bash)
 VAR=$(words $(findstring ${BASH_STR}, ${CHECK_RESULT}))
 
-ldflags=$(shell pkg-config --libs carnavicom_lib)
+ldflags=$(shell pkg-config --libs kanavi_lib)
 check_LIB=true
 
 #----os check------
@@ -36,7 +36,7 @@ ifneq ($(OS_NAME), "linux")
 endif
 
 lib:
-	@echo "Check CARNAVICOM LIB..."
+	@echo "Check KANAVI LIB..."
 
 # ifneq ("$(ldflags)", "")
 # 	@echo "Lib already set"
@@ -54,7 +54,7 @@ lib:
 ros:
 	@echo "copy Carnvavicom lidar ros"
 	mkdir -p ${INC_PATH}
-	cp -rpf carnavicomlidar_ros ${ROS_PATH}/src
+	cp -rpf kanavilidar_ros ${ROS_PATH}/src
 	(cd ${ROS_PATH};	catkin_make)
 	sudo ldconfig
 ifeq (${VAR},1)

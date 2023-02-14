@@ -1,16 +1,16 @@
-#include "carnavicomProcessor.h"
+#include "kanaviProcessor.h"
 #include <time.h>
 #define CHECK_processingTime    1
 
-carnavicomLidarProcessor::carnavicomLidarProcessor()
+kanaviLidarProcessor::kanaviLidarProcessor()
 {
-    m_datagram = new carnaviDatagram();
+    m_datagram = new lidarDatagram();
     m_dataParser = new lidarParser();
 
 	g_lidarModel  = 0;
 }
 
-carnavicomLidarProcessor::~carnavicomLidarProcessor()
+kanaviLidarProcessor::~kanaviLidarProcessor()
 {
 
 }
@@ -19,11 +19,11 @@ carnavicomLidarProcessor::~carnavicomLidarProcessor()
  * @brief to convert raw data to LiDAR protocol structure
  * 
  * @param data 				datagram of LiDAR raw data
- * @return carnaviDatagram 	protocol structure of Carnavicom LiDAR sensor
+ * @return lidarDatagram 	protocol structure of Kanavi-Mobility LiDAR sensor
  */
-carnaviDatagram carnavicomLidarProcessor::process(const std::vector<u_char> &data)
+lidarDatagram kanaviLidarProcessor::process(const std::vector<u_char> &data)
 {
-	carnaviDatagram datagram;
+	lidarDatagram datagram;
 	if(m_dataParser->setData(data))
 	{
 		// printf("Parse ENd..get datagram...\n");
@@ -37,9 +37,9 @@ carnaviDatagram carnavicomLidarProcessor::process(const std::vector<u_char> &dat
 /**
  * @brief return LiDAR Model
  * 
- * @return int ref. CARNAVICOM::MODEL::LiDAR
+ * @return int ref. KANAVI::MODEL::LiDAR
  */
-int carnavicomLidarProcessor::getLiDARModel()
+int kanaviLidarProcessor::getLiDARModel()
 {
     return m_dataParser->getLidarModel();
 }

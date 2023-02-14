@@ -6,23 +6,23 @@ VL_AS16::VL_AS16()
 }
 
 /**
- * @brief to process Carnavicom LiDAR sensor of VL-AS16
+ * @brief to process Kanavi-Mobility LiDAR sensor of VL-AS16
  * 
  * @param data 		datagram of LiDAR raw data
- * @param datagram 	protocol structure of Carnavicom LiDAR sensor
+ * @param datagram 	protocol structure of Kanavi-Mobility LiDAR sensor
  */
-void VL_AS16::processor(const std::vector<u_char> &data, carnaviDatagram &datagram)
+void VL_AS16::processor(const std::vector<u_char> &data, lidarDatagram &datagram)
 {
     datagram.clear();
 
-	datagram.LiDAR_Model = CARNAVICOM::MODEL::LiDAR::VL_AS16;
+	datagram.LiDAR_Model = KANAVI::MODEL::LiDAR::VL_AS16;
 	datagram.PARA_Vertical_Resolution 
-		= CARNAVICOM::VL_AS16::SPECIFICATION::VERTICAL_RESOLUTION;
+		= KANAVI::VL_AS16::SPECIFICATION::VERTICAL_RESOLUTION;
 	datagram.PARA_Horizontal_Resolution
-		= CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_RESOLUTION;
+		= KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_RESOLUTION;
 	datagram.PARA_Start_Angle = 0;
 	datagram.PARA_End_Angle 
-		= CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT;
+		= KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT;
 
     if(data.size() >= 59208)
     {
@@ -42,15 +42,15 @@ void VL_AS16::processor(const std::vector<u_char> &data, carnaviDatagram &datagr
  * @brief to sort raw data with length and object to Protocol Structure
  * 
  * @param data 		datagram of LiDAR raw data
- * @param protocol 	protocol structure of Carnavicom LiDAR sensor
+ * @param protocol 	protocol structure of Kanavi-Mobility LiDAR sensor
  */
-void VL_AS16::sortData(const std::vector<u_char> &data, carnaviDatagram &protocol)
+void VL_AS16::sortData(const std::vector<u_char> &data, lidarDatagram &protocol)
 {
     //length and Intensity
     sortLength(data, protocol);
 
     //Obj Data Processing
-    size_t Obj_Start = static_cast<size_t>(CARNAVICOM::VL_AS16::PROTOCOL_POS::OBJECT_DATA_START);
+    size_t Obj_Start = static_cast<size_t>(KANAVI::VL_AS16::PROTOCOL_POS::OBJECT_DATA_START);
     sortOBJ(data, protocol, Obj_Start);
 
     //Error & Warning
@@ -63,9 +63,9 @@ void VL_AS16::sortData(const std::vector<u_char> &data, carnaviDatagram &protoco
  * @brief to sort only length raw data to Protocol Structure
  * 
  * @param data 		datagram of LiDAR raw data
- * @param protocol 	protocol structure of Carnavicom LiDAR sensor
+ * @param protocol 	protocol structure of Kanavi-Mobility LiDAR sensor
  */
-void VL_AS16::sortData_SET02(const std::vector<u_char> &data, carnaviDatagram &protocol)
+void VL_AS16::sortData_SET02(const std::vector<u_char> &data, lidarDatagram &protocol)
 {
     //length and Intensity
     sortLength(data, protocol);
@@ -80,11 +80,11 @@ void VL_AS16::sortData_SET02(const std::vector<u_char> &data, carnaviDatagram &p
  * @brief to sort only object raw data to Protocol Structure
  * 
  * @param data 		datagram of LiDAR raw data
- * @param protocol 	protocol structure of Carnavicom LiDAR sensor
+ * @param protocol 	protocol structure of Kanavi-Mobility LiDAR sensor
  */
-void VL_AS16::sortData_SET03(const std::vector<u_char> &data, carnaviDatagram &protocol)
+void VL_AS16::sortData_SET03(const std::vector<u_char> &data, lidarDatagram &protocol)
 {
-    size_t Obj_Start = static_cast<size_t>(CARNAVICOM::VL_AS16::PROTOCOL_SIZE::HEADER_SIZE) + SIZE_HEAD2LENGTH;
+    size_t Obj_Start = static_cast<size_t>(KANAVI::VL_AS16::PROTOCOL_SIZE::HEADER_SIZE) + SIZE_HEAD2LENGTH;
     sortOBJ(data, protocol, Obj_Start);
     sortEnW(data, protocol);
 
@@ -96,15 +96,15 @@ void VL_AS16::sortData_SET03(const std::vector<u_char> &data, carnaviDatagram &p
  * @brief to sort raw data to Length value
  * 
  * @param data 		datagram of LiDAR raw data
- * @param protocol 	protocol structure of Carnavicom LiDAR sensor
+ * @param protocol 	protocol structure of Kanavi-Mobility LiDAR sensor
  */
-void VL_AS16::sortLength(const std::vector<u_char> &data, carnaviDatagram &protocol)
+void VL_AS16::sortLength(const std::vector<u_char> &data, lidarDatagram &protocol)
 {
     int start = static_cast<size_t>(SIZE_HEAD2LENGTH)
-                    + static_cast<size_t>(CARNAVICOM::VL_AS16::PROTOCOL_SIZE::HEADER_SIZE);
-    int end = static_cast<size_t>(CARNAVICOM::VL_AS16::PROTOCOL_SIZE::RAWDATA_SIZE)
+                    + static_cast<size_t>(KANAVI::VL_AS16::PROTOCOL_SIZE::HEADER_SIZE);
+    int end = static_cast<size_t>(KANAVI::VL_AS16::PROTOCOL_SIZE::RAWDATA_SIZE)
                 + (static_cast<size_t>(SIZE_HEAD2LENGTH)
-                + static_cast<size_t>(CARNAVICOM::VL_AS16::PROTOCOL_SIZE::HEADER_SIZE));
+                + static_cast<size_t>(KANAVI::VL_AS16::PROTOCOL_SIZE::HEADER_SIZE));
 
     int pos = 0;
 	// clock_t cl_start = clock();
@@ -160,10 +160,10 @@ void VL_AS16::sortLength(const std::vector<u_char> &data, carnaviDatagram &proto
  * @brief to sort raw data to object data
  * 
  * @param data 		datagram of LiDAR raw data
- * @param protocol 	protocol structure of Carnavicom LiDAR sensor
+ * @param protocol 	protocol structure of Kanavi-Mobility LiDAR sensor
  * @param startPos 	object raw data start position
  */
-void VL_AS16::sortOBJ(const std::vector<u_char> &data, carnaviDatagram &protocol, 
+void VL_AS16::sortOBJ(const std::vector<u_char> &data, lidarDatagram &protocol, 
 					const size_t &startPos)
 {
     size_t endPoint = data.size() -4;
@@ -214,9 +214,9 @@ void VL_AS16::sortOBJ(const std::vector<u_char> &data, carnaviDatagram &protocol
  * @brief to sort raw data to error & warning information
  * 
  * @param data 		datagram of LiDAR raw data
- * @param protocol 	protocol structure of Carnavicom LiDAR sensor
+ * @param protocol 	protocol structure of Kanavi-Mobility LiDAR sensor
  */
-void VL_AS16::sortEnW(const std::vector<u_char> &data, carnaviDatagram &protocol)
+void VL_AS16::sortEnW(const std::vector<u_char> &data, lidarDatagram &protocol)
 {
     size_t pos;
     if(protocol.vl_as16.OBJ_CNT%2 == 0)

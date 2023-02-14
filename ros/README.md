@@ -12,8 +12,8 @@
       - [VL-R002IK01 (R2)](#vl-r002ik01-r2)
       - [VL-R004IK02 (R4)](#vl-r004ik02-r4)
   - [Directories](#directories)
-    - [CARNAVICOM\_LIB](#carnavicom_lib)
-    - [carnavicomlidar\_ros](#carnavicomlidar_ros)
+    - [KANAVI\_LIB](#kanavi_lib)
+    - [kanavilidar\_ros](#kanavilidar_ros)
   - [Update Log](#update-log)
     - [2022-06-29](#2022-06-29)
     - [2022-07-04](#2022-07-04)
@@ -46,29 +46,29 @@
 
 ```sh
 cd ros
-make all    # install carnavicom LiDAR LIB and ROS driver
-# if) make lib : install carnavicom LiDAR LIB only
-# if) make ros : install carnavicom LiDAR ROS driver only
+make all    # install kanavi LiDAR LIB and ROS driver
+# if) make lib : install kanavi LiDAR LIB only
+# if) make ros : install kanavi LiDAR ROS driver only
 ```
 
 ## How to start ROS Node
 
 ```sh
-rosrun carnavicomlidar_ros carnavicomlidar_ros -h    # output node active option
+rosrun kanavilidar_ros kanavilidar_ros -h    # output node active option
 
 # if VL-AS16
-rosrun carnavicomlidar_ros carnavicomlidar_ros -i 192.168.123.99 5000
+rosrun kanavilidar_ros kanavilidar_ros -i 192.168.123.99 5000
 
 # if VL-R002IF01 / VL-R0001IK02
 # using UDP multicast
-rosrun carnavicomlidar_ros carnavicomlidar_ros -i 192.168.123.99 5000 -m 224.0.0.5
+rosrun kanavilidar_ros kanavilidar_ros -i 192.168.123.99 5000 -m 224.0.0.5
 
 # make config(.ini) file
 # save the configuration such as IP, port num
-rosrun carnavicomlidar_ros carnavicomlidar_ros -i 192.168.123.99 5000 -fs config.ini
+rosrun kanavilidar_ros kanavilidar_ros -i 192.168.123.99 5000 -fs config.ini
 
 # read config(.ini) file
-rosrun carnavicomlidar_ros carnavicomlidar_ros -fl ~/catkin_ws/src/carnavicomlidar_ros/config/config.ini
+rosrun kanavilidar_ros kanavilidar_ros -fl ~/catkin_ws/src/kanavilidar_ros/config/config.ini
 ```
 
 ### RVIZ visualization Result
@@ -83,24 +83,24 @@ rosrun carnavicomlidar_ros carnavicomlidar_ros -fl ~/catkin_ws/src/carnavicomlid
 
 ## Directories
 
-### CARNAVICOM_LIB
+### KANAVI_LIB
 
-- Library for Carnavicom LiDAR sensor processing
+- Library for Kanavi-Mobility LiDAR sensor processing
 - to connect LiDAR sensor using UDP
-- to process LiDAR raw Data to Datagram(include/header.h/carnaviDatagram)
+- to process LiDAR raw Data to Datagram(include/header.h/lidarDatagram)
 
 ```sh
 /usr/local/lib                            # Library path
-/usr/local/include/CARNAVICOM_LIB         # include path
+/usr/local/include/KANAVI_LIB         # include path
 ```
 
-### carnavicomlidar_ros
+### kanavilidar_ros
 
-- ROS node for Carnavicom LiDAR sensor
+- ROS node for Kanavi-Mobility LiDAR sensor
 - to convert LiDAR raw data to PointXYZRGB(by pcl)
 
 ```sh
-~/catkin_ws/src/carnavicomlidar_ros    # ros node src Path
+~/catkin_ws/src/kanavilidar_ros    # ros node src Path
 ```
 
 ## Update Log
@@ -132,7 +132,7 @@ rosrun carnavicomlidar_ros carnavicomlidar_ros -fl ~/catkin_ws/src/carnavicomlid
 
 ### 2023-01-26
 
-- update Company name(carnavicom->kanavi-mobility)
+- update Company name(kanavi->kanavi-mobility)
 
 ### 2023-02-13
 

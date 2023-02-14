@@ -5,7 +5,7 @@ SRC_HOME=./
 INC_HOME=.
 
 #Library Name
-LIB_BASIC:=libCarnavi_Industrial
+LIB_BASIC:=libKanavi_Industrial
 LIB_NAME:=
 
 LIB_NAME:=

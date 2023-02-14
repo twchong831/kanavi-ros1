@@ -3,7 +3,7 @@
 
 /**
  * @file config.h
- * @author twchong (twchong@carnavi.com)
+ * @author twchong (twchong@Kanavi.com)
  * @brief 
  * @version 0.1
  * @date 2022-07-05
@@ -17,7 +17,7 @@
 #include <boost/property_tree/ini_parser.hpp>	//using .ini file
 #include <boost/filesystem.hpp>
 
-#include "carnavicomLiDAR_ros.h"
+#include "kanaviLiDAR_ros.h"
 #include <fstream>
 
 typedef struct iniconfig
@@ -92,20 +92,20 @@ iniConfig node_config::getConfig(const std::string &name)
 			/* code */
 			boost::property_tree::ini_parser::read_ini(name, pt);		//read file
 
-			st.ip_ = getStr(pt, CARNAVICOM::ROS::CONFIG::NODE_CONFIG 	//get IP
-					+ CARNAVICOM::ROS::CONFIG::IP);
-			st.port_ = getInt(pt, CARNAVICOM::ROS::CONFIG::NODE_CONFIG 	//get port
-					+ CARNAVICOM::ROS::CONFIG::PORT);
-			st.m_ip_ = getStr(pt, CARNAVICOM::ROS::CONFIG::NODE_CONFIG 	//get multicast ip
-					+ CARNAVICOM::ROS::CONFIG::MultiCast);
-			st.topic_ = getStr(pt, CARNAVICOM::ROS::CONFIG::NODE_CONFIG //get topic name
-					+ CARNAVICOM::ROS::CONFIG::TOPIC);
-			st.fixed_ = getStr(pt, CARNAVICOM::ROS::CONFIG::NODE_CONFIG //get fixed name
-					+ CARNAVICOM::ROS::CONFIG::FIXED_FRAME);
-			st.sensor_ip_ = getStr(pt, CARNAVICOM::ROS::CONFIG::NODE_CONFIG 	//get sensor ip
-					+ CARNAVICOM::ROS::CONFIG::SENSOR_IP);
-			st.h_reverse = getBool(pt, CARNAVICOM::ROS::CONFIG::NODE_CONFIG 	//get information of horizontal reverse
-					+ CARNAVICOM::ROS::CONFIG::HORIZONTAL_REVERSE);
+			st.ip_ = getStr(pt, KANAVI::ROS::CONFIG::NODE_CONFIG 	//get IP
+					+ KANAVI::ROS::CONFIG::IP);
+			st.port_ = getInt(pt, KANAVI::ROS::CONFIG::NODE_CONFIG 	//get port
+					+ KANAVI::ROS::CONFIG::PORT);
+			st.m_ip_ = getStr(pt, KANAVI::ROS::CONFIG::NODE_CONFIG 	//get multicast ip
+					+ KANAVI::ROS::CONFIG::MultiCast);
+			st.topic_ = getStr(pt, KANAVI::ROS::CONFIG::NODE_CONFIG //get topic name
+					+ KANAVI::ROS::CONFIG::TOPIC);
+			st.fixed_ = getStr(pt, KANAVI::ROS::CONFIG::NODE_CONFIG //get fixed name
+					+ KANAVI::ROS::CONFIG::FIXED_FRAME);
+			st.sensor_ip_ = getStr(pt, KANAVI::ROS::CONFIG::NODE_CONFIG 	//get sensor ip
+					+ KANAVI::ROS::CONFIG::SENSOR_IP);
+			st.h_reverse = getBool(pt, KANAVI::ROS::CONFIG::NODE_CONFIG 	//get information of horizontal reverse
+					+ KANAVI::ROS::CONFIG::HORIZONTAL_REVERSE);
 		}
 		catch(const boost::property_tree::ptree_error &e)
 		{
@@ -134,38 +134,38 @@ void node_config::saveConfig(const std::string &name, const iniConfig &data)
 	if(!data.ip_.empty())	//set IP 
 	{
 		printf("check IP set?\n");
-		setCofig(pt, CARNAVICOM::ROS::CONFIG::NODE_CONFIG 
-					+ CARNAVICOM::ROS::CONFIG::IP, data.ip_);
+		setCofig(pt, KANAVI::ROS::CONFIG::NODE_CONFIG 
+					+ KANAVI::ROS::CONFIG::IP, data.ip_);
 	}
 	if(data.port_ != 0)		//set port
 	{
-		setCofig(pt, CARNAVICOM::ROS::CONFIG::NODE_CONFIG 
-					+ CARNAVICOM::ROS::CONFIG::PORT, data.port_);
+		setCofig(pt, KANAVI::ROS::CONFIG::NODE_CONFIG 
+					+ KANAVI::ROS::CONFIG::PORT, data.port_);
 	}
 	if(!data.m_ip_.empty())	//set multicast ip
 	{
-		setCofig(pt, CARNAVICOM::ROS::CONFIG::NODE_CONFIG 
-					+ CARNAVICOM::ROS::CONFIG::MultiCast, data.m_ip_);
+		setCofig(pt, KANAVI::ROS::CONFIG::NODE_CONFIG 
+					+ KANAVI::ROS::CONFIG::MultiCast, data.m_ip_);
 	}
 	if(!data.topic_.empty())	//set topic name
 	{
-		setCofig(pt, CARNAVICOM::ROS::CONFIG::NODE_CONFIG 
-					+ CARNAVICOM::ROS::CONFIG::TOPIC, data.topic_);
+		setCofig(pt, KANAVI::ROS::CONFIG::NODE_CONFIG 
+					+ KANAVI::ROS::CONFIG::TOPIC, data.topic_);
 	}
 	if(!data.fixed_.empty())	//set fixed name
 	{
-		setCofig(pt, CARNAVICOM::ROS::CONFIG::NODE_CONFIG 
-					+ CARNAVICOM::ROS::CONFIG::FIXED_FRAME, data.fixed_);
+		setCofig(pt, KANAVI::ROS::CONFIG::NODE_CONFIG 
+					+ KANAVI::ROS::CONFIG::FIXED_FRAME, data.fixed_);
 	}
 	if(!data.sensor_ip_.empty())	//set lidar sensor IP
 	{
-		setCofig(pt, CARNAVICOM::ROS::CONFIG::NODE_CONFIG 
-					+ CARNAVICOM::ROS::CONFIG::SENSOR_IP, data.sensor_ip_);
+		setCofig(pt, KANAVI::ROS::CONFIG::NODE_CONFIG 
+					+ KANAVI::ROS::CONFIG::SENSOR_IP, data.sensor_ip_);
 	}
 	if(data.h_reverse)				//set horizontal reverse checked
 	{
-		setCofig(pt, CARNAVICOM::ROS::CONFIG::NODE_CONFIG 
-					+ CARNAVICOM::ROS::CONFIG::HORIZONTAL_REVERSE, data.h_reverse);
+		setCofig(pt, KANAVI::ROS::CONFIG::NODE_CONFIG 
+					+ KANAVI::ROS::CONFIG::HORIZONTAL_REVERSE, data.h_reverse);
 	}
 
 	boost::property_tree::write_ini(fullp, pt);		//write .ini file.

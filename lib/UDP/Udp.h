@@ -1,6 +1,6 @@
 /**
- * @file carnavicom_udp.h
- * @author twchong (twchong@carnavi.com)
+ * @file kanavi_udp.h
+ * @author twchong (twchong@Kanavi.com)
  * @brief func define UDP
  * @version 0.1
  * @date 2022-07-01
@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef CARNAVICOMUDP_H
-#define CARNAVICOMUDP_H
+#ifndef UDP_H
+#define UDP_H
 
 #include "../include/header.h"
 #include <netinet/in.h>
@@ -30,10 +30,10 @@ typedef std::pair< bool, std::vector<u_char> > TEMP_UDP_BUF;
 
 // #define CONNECTED_UDP
 
-class CarnavicomUDP
+class kanaviUDP
 {
 public:
-    CarnavicomUDP();
+    kanaviUDP();
 
     //from LidAR sensor
     void setMulticast(const std::string &multicast_IP, bool checked=false);
@@ -123,4 +123,4 @@ private:
 #endif
 };
 
-#endif // CARNAVICOMUDP_H
+#endif // UDP_H

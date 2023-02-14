@@ -5,13 +5,13 @@ SRC_HOME=./
 INC_HOME=.
 
 LIB_PATH=../../bin
-LIB_BASIC:=libCarnaviParser
+LIB_BASIC:=libKanaviParser
 LIB_NAME:=
 CXXFLAGS:=
 CFLAGS:=-g -std=c++11 -I${SRC_HOME} -c -Wno-deprecated -fPIC
 
 #Library Name
-LIBS=-L${LIB_PATH} -lCarnavi_VL_AS16 -lCarnavi_Industrial
+LIBS=-L${LIB_PATH} -lKanavi_VL_AS16 -lKanavi_Industrial
 
 OS_NAME=$(OS)
 UNAME_S:= $(shell uname -s)

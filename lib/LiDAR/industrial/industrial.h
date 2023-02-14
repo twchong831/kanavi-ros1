@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Carnavicom.co.,ltd.
+ * Copyright (c) 2022, Kanavi-Mobility.co.,ltd.
  * All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without
@@ -33,8 +33,8 @@
 
 /**
  * @file industrial.h
- * @author twchong (twchong@carnavi.com)
- * @brief processing Carnavicom Industrial LiDAR sensor
+ * @author twchong (twchong@Kanavi.com)
+ * @brief processing Kanavi-Mobility Industrial LiDAR sensor
  * @version 0.1
  * @date 2022-07-01
  * 
@@ -49,16 +49,16 @@ class industrialLiDAR
 {
 private:
 	/* data */
-	void parseLength(const std::vector<u_char> &input, carnaviDatagram &output, int ch);
-	void R2(const std::vector<u_char> &input, carnaviDatagram &output);
-	void R300(const std::vector<u_char> &input, carnaviDatagram &output);
-	void R4(const std::vector<u_char> &input, carnaviDatagram &output);
+	void parseLength(const std::vector<u_char> &input, lidarDatagram &output, int ch);
+	void R2(const std::vector<u_char> &input, lidarDatagram &output);
+	void R300(const std::vector<u_char> &input, lidarDatagram &output);
+	void R4(const std::vector<u_char> &input, lidarDatagram &output);
 
 public:
 	industrialLiDAR(/* args */);
 	~industrialLiDAR();
 
-	void process(const std::vector<u_char> &input, carnaviDatagram &output);
+	void process(const std::vector<u_char> &input, lidarDatagram &output);
 
 private:
 	bool g_checked_CH[INDUSTRAL_MAX_CH];

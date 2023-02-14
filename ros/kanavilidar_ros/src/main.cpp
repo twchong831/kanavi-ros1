@@ -1,21 +1,21 @@
-#include "../include/carnavicomLiDAR_ROS/carnavicomLiDAR_ros.h"
-#include "../include/carnavicomLiDAR_ROS/carnavi_converter.h"
+#include "../include/kanaviLiDAR_ROS/kanaviLiDAR_ros.h"
+#include "../include/kanaviLiDAR_ROS/kanavi_converter.h"
 #include <pcl/common/common.h>
 #include <pcl/common/impl/angles.hpp>
 #include <pcl/common/transforms.h>
 
 #include <stdlib.h>
-#include "../include/carnavicomLiDAR_ROS/config.h"
+#include "../include/kanaviLiDAR_ROS/config.h"
 
-void printBuf(carnaviDatagram dg)
+void printBuf(lidarDatagram dg)
 {
 	int line = 0;
 	switch(dg.LiDAR_Model)
 	{
-	case CARNAVICOM::MODEL::LiDAR::VL_AS16:
-		for(int ch=0; ch<CARNAVICOM::VL_AS16::SPECIFICATION::VERTICAL_CHANNEL; ch++)
+	case KANAVI::MODEL::LiDAR::VL_AS16:
+		for(int ch=0; ch<KANAVI::VL_AS16::SPECIFICATION::VERTICAL_CHANNEL; ch++)
 		{
-			for(int i=0; i<CARNAVICOM::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT; i++)
+			for(int i=0; i<KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_DATA_CNT; i++)
 			{
 				printf("[%.2d][%.4d] : %.4d [cm] ", ch, dg.vl_as16.RAWdata_Angle[i], 
 											dg.vl_as16.RAWdata_RadialDistance[ch][i]);
@@ -30,10 +30,10 @@ void printBuf(carnaviDatagram dg)
 			line = 0;
 		}
 		break;
-	case CARNAVICOM::MODEL::LiDAR::VL_R002IF01:
+	case KANAVI::MODEL::LiDAR::VL_R002IF01:
 		for(int ch=0; ch<2; ch++)
 		{
-			for(int i=0; i<CARNAVICOM::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_DATA_CNT; i++)
+			for(int i=0; i<KANAVI::INDUSTRIAL::SPECIFICATION::R2::HORIZONTAL_DATA_CNT; i++)
 			{
 				printf("[%.1d][%.3d] : %f [m] ", ch, i, dg.industrial_Length[ch][i]);
 				line++;
@@ -64,7 +64,7 @@ void helpAlarm()
 		"-hr : horizontal Reverse\n"
 		"\t ex) -hr\n"
 		"-fl : config file load\n"
-		"\t ex) -fl ~/catkin_ws/src/carnavicomlidar_ros/config/[fileName].ini\n"
+		"\t ex) -fl ~/catkin_ws/src/kanavilidar_ros/config/[fileName].ini\n"
 		"-fs : to save configuration using ini File\n"
 		"\t ex) -i 192.168.xxx.xxx 5000 -fs [fileName].ini\n"
 		"[VL-AS16] UDP Mode : Unicast\n"
@@ -108,13 +108,13 @@ sensor_msgs::PointCloud2 cloud_to_cloud_msg(int ww, int hh, const pcl::PointClou
 /**
 * @mainpage main.cpp
 * @brief    LiDAR 프로세서 동작을 확인하기 위한 main
-* @details  carnavicomLidarProcessor를 통한 데이터 처리를 확인
+* @details  kanaviLidarProcessor를 통한 데이터 처리를 확인
 */
 int main(int argc, char* argv[])
 {
 
 	/* ---define ROS------*/
-	ros::init(argc, argv, "carnavi_cloud_node");	//ROS init
+	ros::init(argc, argv, "Kanavi_cloud_node");	//ROS init
 	ros::Publisher lidar_pub;						//publisher define
 	ros::NodeHandle nh;								//노드 핸들러 define
 	// ros::Rate loop_rate(15); 						//30Hz - freq.
@@ -126,7 +126,7 @@ int main(int argc, char* argv[])
 	bool checked_iniLoad = false;
 
 	/*---define UDP communcation Var.*/
-	CarnavicomUDP *m_udp = new CarnavicomUDP;		// carnavicom UDP processor
+	kanaviUDP *m_udp = new kanaviUDP;		// kanavi UDP processor
 
 	std::string udpIP = "192.168.123.99";			// local UDP ethernet Port IP
 	std::string g_udpIP = "224.0.0.5";				// UDP multicast Group IP
@@ -136,9 +136,9 @@ int main(int argc, char* argv[])
 	bool checked_sensorIP = false;					//check transmit LiDAR sensor IP
 	std::string sensor_IP = "192.168.123.200";		//set transmit LiDAR sensor IP
 
-	carnavicomLidarProcessor *m_carnaviLidar;		// carnavicom LiDAR processor
-	m_carnaviLidar = new carnavicomLidarProcessor;
-	carnavi_converter *m_convertor = new carnavi_converter;
+	kanaviLidarProcessor *m_KanaviLidar;		// kanavi LiDAR processor
+	m_KanaviLidar = new kanaviLidarProcessor;
+	kanavi_converter *m_convertor = new kanavi_converter;
 
 	node_config *m_config	= new node_config;		// configuration file
 	iniConfig configList;							//about configuration structure
@@ -289,7 +289,7 @@ int main(int argc, char* argv[])
 	}
 
 	std::vector<u_char> recv_buf;		//udp recv buf;
-	carnaviDatagram datagram;			//lidar total buf struct
+	lidarDatagram datagram;			//lidar total buf struct
 	Eigen::Matrix4f transform_Z = Eigen::Matrix4f::Identity();	// idle vector using point cloud rotation
 
 	clock_t start,end;					// check processing time
@@ -306,24 +306,24 @@ int main(int argc, char* argv[])
 		recv_buf = m_udp->getData();												//get LiDAR data using udp
 		printf("recv_buf size %d\n", recv_buf.size());
 
-		datagram = m_carnaviLidar->process(recv_buf);								//processing, get datagram
+		datagram = m_KanaviLidar->process(recv_buf);								//processing, get datagram
 		end = clock();
 		result = (double)(end - start);
 		cout << "Stage 1 Time : "<< ((result)/CLOCKS_PER_SEC) * 1000 << " microseconds" << endl;
 
-		switch(m_carnaviLidar->getLiDARModel())										//check lidar model for point cloud rotation
+		switch(m_KanaviLidar->getLiDARModel())										//check lidar model for point cloud rotation
 		{
-		case static_cast<int>(CARNAVICOM::MODEL::LiDAR::VL_AS16) :
+		case static_cast<int>(KANAVI::MODEL::LiDAR::VL_AS16) :
 			z_rotat_angle = 17.5;
 			break;
-		case CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R002IF01:
+		case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R002IF01:
 			z_rotat_angle = 30;
 			break;
-		case CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R001IK02:
+		case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R001IK02:
 			z_rotat_angle = -60;
 			break;
-		case CARNAVICOM::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R004IK02:
-			z_rotat_angle = -50;
+		case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R004IK02:
+			z_rotat_angle = 35;
 			break;
 		default:
 			break;
@@ -366,7 +366,7 @@ int main(int argc, char* argv[])
 
 	delete m_udp;
 	delete m_convertor;
-	delete m_carnaviLidar;
+	delete m_KanaviLidar;
 	
 	return 0;
 }

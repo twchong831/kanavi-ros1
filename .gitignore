@@ -1,1 +1,4 @@
 load.sh
+.vscode
+*.so
+*.o
