@@ -132,8 +132,12 @@ rosrun kanavilidar_ros kanavilidar_ros -fl ~/catkin_ws/src/kanavilidar_ros/confi
 
 ### 2023-01-26
 
-- update Company name(kanavi->kanavi-mobility)
+- update Company name(canavi->kanavi-mobility)
 
 ### 2023-02-13
 
 - update & add VL-R004IK02 FUNC.
+
+### 2023-02-14
+
+- update all Compayname(carnavicom to kanavi-mobility)
