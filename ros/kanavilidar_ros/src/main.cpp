@@ -67,6 +67,20 @@ void helpAlarm()
 		"\t ex) -fl ~/catkin_ws/src/kanavilidar_ros/config/[fileName].ini\n"
 		"-fs : to save configuration using ini File\n"
 		"\t ex) -i 192.168.xxx.xxx 5000 -fs [fileName].ini\n"
+		"-axes : to set basic axes\n"
+		"\t opions================\n "
+		"\t -axes 1 \n"
+		"\t\t\t\tz   y\t\t\t\n"
+		"\t\t\t\t|  7\t\t\t\t\n"
+		"\t\t\t\t| /\t\t\t\t\n"
+		"\t\t\t\t|/\t\t\t\t	\n"
+		"\t\t\t\t+----------->x\t\n"
+		"\t -axes 2 \n"
+		"\t\t\t\tz   x\t\t\t\t\n"
+		"\t\t\t\t|  7\t\t\t\t\n"
+		"\t\t\t\t| /\t\t\t\t\n"
+		"\t\t\t\t|/\t\t\t\t\n"
+		" y<------------+\t\t\t\t\n"
 		"[VL-AS16] UDP Mode : Unicast\n"
 		"          Base IP  : 192.168.123.99, 5000"
 		"[Industrial] UDP Mode : Multicast\n"
@@ -145,6 +159,8 @@ int main(int argc, char* argv[])
 
 	float z_rotat_angle = 0;
 
+	int axesMode = 1;								// axes mode select
+
 	//check argv -- 인자 확인
 	if(argc == 0)
 	{
@@ -206,6 +222,10 @@ int main(int argc, char* argv[])
 					perror("Please Insert Config File name(.ini)\n");
 					return -1;
 				}
+			}
+			else if(!strcmp(argv[i], "-axes"))
+			{
+				axesMode = atoi(argv[i+1]);
 			}
 			else if(!strcmp(argv[i], "-h"))								//output help command
 			{
@@ -329,7 +349,7 @@ int main(int argc, char* argv[])
 			break;
 		}
 
-		//rotation Z-axis
+		//rotation Z-axes
 		float rad = pcl::deg2rad(z_rotat_angle);
 		transform_Z(0,0) = cos(rad);
 		transform_Z(0,1) = -sin(rad);
@@ -341,6 +361,7 @@ int main(int argc, char* argv[])
 			// printf("DISPLAY....\n");
 			m_convertor->setReverse(checked_h_reverse);			// check horizontal angle Reverse
 			m_convertor->setDatagram(datagram);					// convert Length array to Point Cloud
+			m_convertor->setaxesMode(axesMode);					// set axes mode in 3D visualization
 			PointCloudT cloud = m_convertor->getPointCloud();	// get pcl::PointCloud<pcl::PointXYZRGB>
 			printf("point size : %d\n", cloud.size());
 			

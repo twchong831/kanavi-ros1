@@ -3,6 +3,7 @@
 kanavi_converter::kanavi_converter(/* args */)
 {
 	g_checked_HorizontalReverse = false;
+	gaxesMode = 1;
 }
 
 kanavi_converter::~kanavi_converter()
@@ -170,9 +171,20 @@ void kanavi_converter::generatePointCloud(const lidarDatagram &datagram, PointCl
 pcl::PointXYZRGB kanavi_converter::length2point(float len, float v_sin, float v_cos, float h_sin, float h_cos)
 {
 	pcl::PointXYZRGB p_;
-	p_.x = len * v_cos * h_cos;
-	p_.y = len * v_cos * h_sin;
-	p_.z = len * v_sin;
+	switch(gaxesMode)
+	{
+		case 1:
+		p_.x = len * v_cos * h_cos;
+		p_.y = len * v_cos * h_sin;
+		p_.z = len * v_sin;
+		break;
+		case 2:
+		p_.x = len * v_cos * h_sin;
+		p_.y = -(len * v_cos * h_cos);
+		p_.z = len * v_sin;
+		break;
+	}
+
 	float r, g, b;
 	HSV2RGB(&r, &g, &b, len * 20, 1.0, 1.0); // convert hsv to rgb
 	p_.r = r * 255;
@@ -280,10 +292,10 @@ void kanavi_converter::setDatagram(const lidarDatagram &datagram)
 	}
 	printf("\n[*]Sensor Spcification---------\n");
 	printf("\tHorizontal FoV\t\t: %f\n"
-		   "\tHorizontal Resol\t: %f\n"
-		   "\tVertical FoV\t\t: %f\n"
-		   "\tVertical Resol\t\t: %f\n",
-		   hfov, datagram.PARA_Horizontal_Resolution, vfov, datagram.PARA_Vertical_Resolution);
+			"\tHorizontal Resol\t: %f\n"
+			"\tVertical FoV\t\t: %f\n"
+			"\tVertical Resol\t\t: %f\n",
+			hfov, datagram.PARA_Horizontal_Resolution, vfov, datagram.PARA_Vertical_Resolution);
 
 	// calculate sin,cos
 	if (!checked_setAngular)
@@ -313,4 +325,14 @@ void kanavi_converter::setReverse(const bool &checked)
 PointCloudT kanavi_converter::getPointCloud()
 {
 	return cloud;
+}
+
+/**
+ * @brief set visualization basic axes
+ * 
+ * @param mode 
+ */
+void kanavi_converter::setaxesMode(const int &mode)
+{
+	gaxesMode = mode;
 }
