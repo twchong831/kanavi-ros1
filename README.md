@@ -11,6 +11,9 @@
     - [RVIZ visualization Result](#rviz-visualization-result)
       - [VL-R002IK01 (R2)](#vl-r002ik01-r2)
       - [VL-R004IK02 (R4)](#vl-r004ik02-r4)
+      - [AXES](#axes)
+        - [1](#1)
+        - [2](#2)
   - [Directories](#directories)
     - [KANAVI\_LIB](#kanavi_lib)
     - [kanavilidar\_ros](#kanavilidar_ros)
@@ -23,6 +26,8 @@
     - [2023-01-25](#2023-01-25)
     - [2023-01-26](#2023-01-26)
     - [2023-02-13](#2023-02-13)
+    - [2023-02-14](#2023-02-14)
+    - [2023-03-28](#2023-03-28)
 
 ## Development ENV
 
@@ -54,7 +59,7 @@ make all    # install kanavi LiDAR LIB and ROS driver
 ## How to start ROS Node
 
 ```sh
-rosrun kanavilidar_ros kanavilidar_ros -h    # output node active option
+rosrun kanavilidar_ros kanavilidar_ros -h    # output node active options
 
 # if VL-AS16
 rosrun kanavilidar_ros kanavilidar_ros -i 192.168.123.99 5000
@@ -62,6 +67,10 @@ rosrun kanavilidar_ros kanavilidar_ros -i 192.168.123.99 5000
 # if VL-R002IF01 / VL-R0001IK02
 # using UDP multicast
 rosrun kanavilidar_ros kanavilidar_ros -i 192.168.123.99 5000 -m 224.0.0.5
+
+# change base Axes
+rosrun kanavilidar_ros kanavilidar_ros -i 192.168.123.99 5000 -m 224.0.0.5 -axes 1
+rosrun kanavilidar_ros kanavilidar_ros -i 192.168.123.99 5000 -m 224.0.0.5 -axes 2
 
 # make config(.ini) file
 # save the configuration such as IP, port num
@@ -80,6 +89,24 @@ rosrun kanavilidar_ros kanavilidar_ros -fl ~/catkin_ws/src/kanavilidar_ros/confi
 #### VL-R004IK02 (R4)
 
 ![output-R4](https://github.com/kanaviMobility/ROS/blob/83151f9fefc123cacc877ce8deb81573dee3af0d/ros/image/output_R4.png)
+
+#### AXES
+
+##### 1
+
+- base Axes
+![base axes](./image/axes1.png)
+
+- result
+![base-axes-vlas16](./image/base_axes.png)
+
+##### 2
+
+- base Axes
+![base axes2](./image/axes2.png)
+
+- result
+![change-axes-vlas16](./image/change_axes_2.png)
 
 ## Directories
 
@@ -141,3 +168,7 @@ rosrun kanavilidar_ros kanavilidar_ros -fl ~/catkin_ws/src/kanavilidar_ros/confi
 ### 2023-02-14
 
 - update all Compayname(carnavicom to kanavi-mobility)
+
+### 2023-03-28
+
+- to update for Select Axes

@@ -55,6 +55,7 @@ public:
 
 	void setDatagram(const lidarDatagram &datagram);
 	void setReverse(const bool &checked=false);
+	void setaxesMode(const int &mode = 1);
 	PointCloudT getPointCloud();
 private:
 	//func.
@@ -76,6 +77,9 @@ private:
 	PointCloudT cloud;
 
 	bool g_checked_HorizontalReverse;
+
+	// axes mode
+	int gaxesMode;
 };
 
 #endif // __Kanavi_CONVERTER_H__
