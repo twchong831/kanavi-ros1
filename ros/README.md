@@ -95,18 +95,18 @@ rosrun kanavilidar_ros kanavilidar_ros -fl ~/catkin_ws/src/kanavilidar_ros/confi
 ##### 1
 
 - base Axes
-![base axes](./image/axes1.png)
+![base axes](https://github.com/kanaviMobility/ROS/blob/15c4400f8d59ec23de53a0d3b7421837af1d274b/ros/image/axes1.png)
 
 - result
-![base-axes-vlas16](./image/base_axes.png)
+![base-axes-vlas16](https://github.com/kanaviMobility/ROS/blob/15c4400f8d59ec23de53a0d3b7421837af1d274b/ros/image/base_axes.png)
 
 ##### 2
 
 - base Axes
-![base axes2](./image/axes2.png)
+![base axes2](https://github.com/kanaviMobility/ROS/blob/15c4400f8d59ec23de53a0d3b7421837af1d274b/ros/image/axes2.png)
 
 - result
-![change-axes-vlas16](./image/change_axes_2.png)
+![change-axes-vlas16](https://github.com/kanaviMobility/ROS/blob/15c4400f8d59ec23de53a0d3b7421837af1d274b/ros/image/change_axes_2.png)
 
 ## Directories
 
