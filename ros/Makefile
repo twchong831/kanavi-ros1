@@ -49,7 +49,7 @@ lib:
 # ifeq ( $(check_LIB), true )
 #	(cd ${LIB_PATH}; make clean; make all)
 # endif
-	(cd ${LIB_PATH}; make uninstall; make clean; make install)
+	(cd ${LIB_PATH}; make remove; make clean; make install)
 
 ros:
 	@echo "copy Carnvavicom lidar ros"
