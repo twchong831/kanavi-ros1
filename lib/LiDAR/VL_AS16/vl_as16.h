@@ -33,7 +33,7 @@
 
 /**
  * @file vl_as16.h
- * @author twchong (twchong@Kanavi.com)
+ * @author twchong (twchong@kanavi-mobility.com)
  * @brief to processing Kanavi-Mobility LiDAR sensor of VL-AS16
  * @version 0.1
  * @date 2022-07-01

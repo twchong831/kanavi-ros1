@@ -33,7 +33,7 @@
 
 /**
  * @file industrial.h
- * @author twchong (twchong@Kanavi.com)
+ * @author twchong (twchong@kanavi-mobility.com)
  * @brief processing Kanavi-Mobility Industrial LiDAR sensor
  * @version 0.1
  * @date 2022-07-01

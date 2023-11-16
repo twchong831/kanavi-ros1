@@ -1,6 +1,6 @@
 /**
  * @file kanavi_udp.h
- * @author twchong (twchong@Kanavi.com)
+ * @author twchong (twchong@kanavi-mobility.com)
  * @brief func define UDP
  * @version 0.1
  * @date 2022-07-01
