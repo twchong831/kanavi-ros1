@@ -53,6 +53,7 @@ private:
 	void R2(const std::vector<u_char> &input, lidarDatagram &output);
 	void R300(const std::vector<u_char> &input, lidarDatagram &output);
 	void R4(const std::vector<u_char> &input, lidarDatagram &output);
+	void R270(const std::vector<u_char> &input, lidarDatagram &output); // Modified part
 
 public:
 	industrialLiDAR(/* args */);

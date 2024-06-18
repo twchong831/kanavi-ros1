@@ -4,7 +4,7 @@
 lidarParser::lidarParser()
 {
 	// protocolDatagram = new lidarDatagram();
-	g_LiDARModel = KANAVI::MODEL::VL_AS16;
+	g_LiDARModel = KANAVI::MODEL::VL_R004IK01;
 
 	m_detect_Start = false;
 	m_detect_End = false;
@@ -42,26 +42,29 @@ bool lidarParser::setData(const std::vector<u_char> &data)
 		{
 			perror("CAN NOT Detected LiDAR Sensor...");
 		}
-		// printf("model ? %d\n", protocolDatagram.LiDAR_Model);
+		printf("model ? %d\n", protocolDatagram.LiDAR_Model);
 	}
 
 	switch (protocolDatagram.LiDAR_Model)
 	{
-	case static_cast<int>(KANAVI::MODEL::LiDAR::VL_AS16) :
+	case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R004IK01:
+		// break;
+		printf("[lidarParser][setData] classification R4!\n");
+		return accumulateData_industrial(data, protocolDatagram.LiDAR_Model);
+	case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R002IK01:
+		printf("[lidarParser][setData] classification R2!\n");
+		return accumulateData_industrial(data, protocolDatagram.LiDAR_Model);
+	//case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R001IK02:
+		// break;
+		//printf("[lidarParser][setData] classification R300!\n");
+		//return accumulateData_industrial(data, protocolDatagram.LiDAR_Model);
+	case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R001IK03: // Modified part
+	        printf("[lidarParser][setData] classification R270!\n");
+	        return accumulateData_industrial(data, protocolDatagram.LiDAR_Model);
+	case static_cast<int>(KANAVI::MODEL::LiDAR::VL_AS16):
 		/* code */
-		// printf("[lidarParser][setData] classification AS16!\n");
+		printf("[lidarParser][setData] classification AS16!\n");
 		return accumulateData_VLAS16(data);
-	case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R002IF01:
-		// printf("[lidarParser][setData] classification R2!\n");
-		return accumulateData_industrial(data, protocolDatagram.LiDAR_Model);
-	case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R001IK02:
-		// break;
-		// printf("[lidarParser][setData] classification R300!\n");
-		return accumulateData_industrial(data, protocolDatagram.LiDAR_Model);
-	case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R004IK02:
-		// break;
-		// printf("[lidarParser][setData] classification R4!\n");
-		return accumulateData_industrial(data, protocolDatagram.LiDAR_Model);
 	default:
 		printf("[lidarParser][setData] WHAT?! UnKnown LiDAR Sensor %d\n", protocolDatagram.LiDAR_Model);
 		return false;
@@ -124,12 +127,14 @@ int lidarParser::classificationModel(const std::vector<u_char> &data)
 		u_char indus_M = data[KANAVI::INDUSTRIAL::COMMON::PROTOCOL_POS::PRODUCT_LINE];
 		switch(indus_M)
 		{
-		case KANAVI::MODEL::LiDAR::VL_R002IF01:
-			return KANAVI::MODEL::LiDAR::VL_R002IF01;
-		case KANAVI::MODEL::LiDAR::VL_R001IK02:
-			return KANAVI::MODEL::LiDAR::VL_R001IK02;
-		case KANAVI::MODEL::LiDAR::VL_R004IK02:
-			return KANAVI::MODEL::LiDAR::VL_R004IK02;
+		case KANAVI::MODEL::LiDAR::VL_R002IK01:
+			return KANAVI::MODEL::LiDAR::VL_R002IK01;
+		//case KANAVI::MODEL::LiDAR::VL_R001IK02:
+			//return KANAVI::MODEL::LiDAR::VL_R001IK02;
+		case KANAVI::MODEL::LiDAR::VL_R004IK01:
+			return KANAVI::MODEL::LiDAR::VL_R004IK01;
+		case KANAVI::MODEL::LiDAR::VL_R001IK03: // Modified part
+		  return KANAVI::MODEL::LiDAR::VL_R001IK03;
 		}
 	}
 
@@ -150,7 +155,7 @@ void lidarParser::parsing_VLAS16(const std::vector<u_char> &data)
 /**
  * @brief to check all Data input(VL-AS16)
  * 
- * @param data 		datagram of LiDAR raw data
+ * @param data 	datagram of LiDAR raw data
  * @return true 	if datagram has header and tail
  * @return false 	if datagram has only header or tail
  */
@@ -206,7 +211,7 @@ bool lidarParser::accumulateData_VLAS16(const std::vector<u_char> &data)
 /**
  * @brief  to check all Data input(industrial)
  * 
- * @param data 		datagram of LiDAR raw data
+ * @param data 	datagram of LiDAR raw data
  * @param model 	industrial LiDAR model
  * @return true 	if datagram has header and tail
  * @return false 	if datagram has only header or tail
@@ -217,21 +222,23 @@ bool lidarParser::accumulateData_industrial(const std::vector<u_char> &data, int
 	// u_char model = data[KANAVI::INDUSTRIAL::COMMON::PROTOCOL_POS::PRODUCT_LINE];
 	switch(model)
 	{
-		case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R002IF01:	//R2
+		case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R002IK01:	//R2
 			return process_R2(data);
-		case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R001IK02:	//R300
-			return process_R300(data);
-		case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R004IK02:	//R4
+		//case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R001IK02:	//R300
+			//return process_R300(data);
+		case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R004IK01:	//R4
 			return process_R4(data);
+		case KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::MODEL::VL_R001IK03: //R270 // Modified part
+		  return process_R270(data);
 		default:
 			return false;
 	}
 }
 
 /**
- * @brief to check all Data input(industrial - VL_R002IF01(R2))
+ * @brief to check all Data input(industrial - VL_R002IK01(R2))
  * 
- * @param data 		datagram of LiDAR raw data
+ * @param data 	datagram of LiDAR raw data
  * @return true 	if datagram has header and tail
  * @return false 	if datagram has only header or tail
  */
@@ -265,6 +272,7 @@ bool lidarParser::process_R2(const std::vector<u_char> &data)
 		m_detect_Start = true;
 		m_detect_End = true;
 		g_lidarBuffer = data;
+		protocolDatagram.PARA_Input_END = true;
 	}
 
 	if(m_detect_Start && m_detect_End)
@@ -279,13 +287,13 @@ bool lidarParser::process_R2(const std::vector<u_char> &data)
 }
 
 /**
- * @brief to check all Data input(industrial - VL_R002IF01(R2))
+ * @brief to check all Data input(industrial - VL_R002IK01(R2))
  * 
- * @param data 		datagram of LiDAR raw data
+ * @param data 	datagram of LiDAR raw data
  * @return true 	if datagram has header and tail
  * @return false 	if datagram has only header or tail
  */
-bool lidarParser::process_R300(const std::vector<u_char> &data) 
+/*bool lidarParser::process_R300(const std::vector<u_char> &data) 
 {
 	if(data.size() < KANAVI::INDUSTRIAL::R300::PROTOCOL_SIZE::TOTAL)
 	{
@@ -325,7 +333,7 @@ bool lidarParser::process_R300(const std::vector<u_char> &data)
 		m_detect_End = false;
 	}
 	return protocolDatagram.PARA_Input_END;
-}
+}*/
 
 /**
  * @brief 
@@ -363,6 +371,11 @@ bool lidarParser::process_R4(const std::vector<u_char> &data)
 		m_detect_Start = true;
 		m_detect_End = true;
 		g_lidarBuffer = data;
+                /*for(size_t i=0; i<data.size(); i++)
+                {
+                    g_lidarBuffer.push_back(data[i]);
+                }*/
+		protocolDatagram.PARA_Input_END = true;
 	}
 
 	if(m_detect_Start
@@ -372,9 +385,57 @@ bool lidarParser::process_R4(const std::vector<u_char> &data)
 		parsingRawData_industrial(g_lidarBuffer, protocolDatagram);
 		m_detect_Start = false;
 		m_detect_End = false;
+		protocolDatagram.PARA_Input_END = true;
 	}
 	
-	// printf("check Return value : %d\n", protocolDatagram.PARA_Input_END);
+	printf("check Return value : %d\n", protocolDatagram.PARA_Input_END);
+	return protocolDatagram.PARA_Input_END;
+}
+
+// Modified part
+bool lidarParser::process_R270(const std::vector<u_char> &data) 
+{
+	if(data.size() < KANAVI::INDUSTRIAL::R270::PROTOCOL_SIZE::TOTAL)
+	{
+		// return false;
+		if(data[KANAVI::INDUSTRIAL::COMMON::PROTOCOL_POS::HEADER] 
+			== KANAVI::INDUSTRIAL::COMMON::PROTOCOL_VALUE::HEADER)
+		{
+			m_detect_Start = true;
+			g_lidarBuffer.clear();
+			g_lidarBuffer = data;
+		}
+		else
+		{
+			if(m_detect_Start)
+			{
+				std::vector<u_char>total_buffer;
+				
+				for(size_t i=0; i<data.size(); i++)
+				{
+					g_lidarBuffer.push_back(data[i]);
+				}
+				m_detect_End = true;
+				//protocolDatagram.PARA_Input_END = true;
+			}
+		}
+	}
+	else if(data.size() == KANAVI::INDUSTRIAL::R270::PROTOCOL_SIZE::TOTAL)
+	{
+		m_detect_Start = true;
+		m_detect_End = true;
+		g_lidarBuffer = data;
+		//protocolDatagram.PARA_Input_END = true;
+	}
+
+	if(m_detect_Start
+		&& m_detect_End
+		&& g_lidarBuffer.size() ==  KANAVI::INDUSTRIAL::R270::PROTOCOL_SIZE::TOTAL)
+	{
+		parsingRawData_industrial(g_lidarBuffer, protocolDatagram);
+		m_detect_Start = false;
+		m_detect_End = false;
+	}
 	return protocolDatagram.PARA_Input_END;
 }
 
@@ -405,6 +466,10 @@ std::vector<u_char> lidarParser::getRawData()
 	if(!m_detect_Start && !m_detect_End && previous_lidarBuffer.size() != 0)
 	{
 		return previous_lidarBuffer;
+	}
+	else
+	{
+	    return std::vector<u_char>();
 	}
 }
 

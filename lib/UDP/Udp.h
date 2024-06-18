@@ -21,7 +21,7 @@
 
 typedef std::pair< bool, std::vector<u_char> > TEMP_UDP_BUF;
 
-#define TEMP_BUF_MAX_SIZE	500
+#define TEMP_BUF_MAX_SIZE	2000
 
 #define HLK_GROUP_BUF_SIZE 60557
 #define HLK_PACKE_SIZE 8651
@@ -57,6 +57,8 @@ public:
 
 private:
 	//func.
+	bool isCompletePacket(const std::vector<u_char>& data);
+	
 	void th_recv_loop();
 	void sendDatagram();
 

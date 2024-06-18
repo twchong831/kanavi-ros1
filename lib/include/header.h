@@ -61,7 +61,8 @@
 #define BUFFER_SIZE 65000
 
 #define INDUSTRAL_MAX_CH	KANAVI::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_CHANNEL
-#define INDUSTRAL_MAX_CNT	KANAVI::INDUSTRIAL::SPECIFICATION::R300::HORIZONTAL_DATA_CNT
+#define INDUSTRAL_MAX_CNT	KANAVI::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_DATA_CNT
+// #define INDUSTRAL_MAX_CNT_R4       KANAVI::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_DATA_CNT
 
 typedef struct pointXYZ{
     float x;
@@ -202,28 +203,29 @@ typedef struct lidar_datagram {
 	float industrial_Length[INDUSTRAL_MAX_CH][INDUSTRAL_MAX_CNT];	// industrial LiDAR buf
 
     lidar_datagram() {
-        LiDAR_Model = -1;
-        PARA_Vertical_Resolution = KANAVI::VL_AS16::SPECIFICATION::VERTICAL_RESOLUTION;
-        PARA_Horizontal_Resolution = KANAVI::VL_AS16::SPECIFICATION::HORIZONTAL_RESOLUTION;
+        LiDAR_Model = 0x06; // When change this value to the value corresponding to VL-R270, it doesn't create point clouds.
+        PARA_Vertical_Resolution = KANAVI::INDUSTRIAL::SPECIFICATION::R4::VERTICAL_RESOLUTION;
+        PARA_Horizontal_Resolution = KANAVI::INDUSTRIAL::SPECIFICATION::R4::HORIZONTAL_RESOLUTION;
         PARA_Start_Angle    = 0;
         PARA_End_Angle      = 1159;
-        PARA_Input_END      = false;
+        PARA_Input_END      = true; // Also, when change this to True for generation point clouds, it doesn't create point clouds.
         /*  ************************
          *          S3 : 1
          *          S16 : 2
          * ***************************/
-        LiDAR_IP = "192.168.1.80";
+        // LiDAR_IP = "192.168.1.80";
+        LiDAR_IP = "192.168.123.200";
     }
 
     void clear()
     {
-		for(int i=0; i<INDUSTRAL_MAX_CH; i++)
+		/*for(int i=0; i<INDUSTRAL_MAX_CH; i++)
 		{
 			memset(industrial_Length[i], 0, INDUSTRAL_MAX_CNT);
 		}
-		vl_as16.clear();
+		vl_as16.clear();*/
 
-        PARA_Input_END = false;
+        PARA_Input_END = true;
     }
 
 }lidarDatagram;

@@ -1,16 +1,19 @@
 #include "Udp.h"
+#include <cassert>
+#include <algorithm>
+#include <iterator>
 
 kanaviUDP::kanaviUDP()
 {
-    g_UDP_Multicast = false;
-    g_localIP = "192.168.100.99";
-    g_LiDAR_IP_01 = "192.168.100.1";
+    g_UDP_Multicast = true;
+    g_localIP = "192.168.123.100";
+    g_LiDAR_IP_01 = "192.168.123.200";
     g_UDP_PORT = 5000;
 
     memset(g_intput_buffer, 0, BUFFER_SIZE);
 
     g_checkLiDAR_IP = false;
-    g_inputLidar_IP = "192.168.100.92";
+    g_inputLidar_IP = "192.168.123.200";
 }
 
 /**
@@ -58,7 +61,7 @@ void kanaviUDP::InitUDP(const std::string &IP, const int &port)
     }
     else    //multicast
     {
-		printf("[UDP] init Multicast...\n");
+	printf("[UDP] init Multicast...\n");
         g_udpAddr.sin_family = AF_INET;
         g_udpAddr.sin_addr.s_addr = htonl(INADDR_ANY);
         g_udpAddr.sin_port = htons(port);
@@ -122,61 +125,51 @@ int kanaviUDP::disconnect()
  * 
  * @return std::vector<u_char> 
  */
-std::vector<u_char> kanaviUDP::getData()
-{
+std::vector<u_char> kanaviUDP::getData() {
+    static std::vector<int> packetSizes;
     memset(&g_SenderAddr, 0, sizeof(struct sockaddr_in));
     socklen_t lidarAddress_length = sizeof(g_SenderAddr);
 
     std::vector<u_char> output;
-
-#ifndef CONNECTED_UDP
-    // int size = recvfrom(g_udpSocket, output->data(), 300000, 0, (struct sockaddr*)&g_SenderAddr, &lidarAddress_length);
-    // int size = recvfrom(g_udpSocket, g_intput_buffer, BUFFER_SIZE, MSG_DONTWAIT, (struct sockaddr*)&g_SenderAddr, &lidarAddress_length); //set non blocking mode
-	int size = recvfrom(g_udpSocket, g_intput_buffer, BUFFER_SIZE, 0, (struct sockaddr*)&g_SenderAddr, &lidarAddress_length); //set blocking mode
-#else
-// 	printf("wait...connected udp input...\n");
-	int size = read(g_udpSocket, g_intput_buffer, BUFFER_SIZE);
-#endif //#ifndef CONNECTED_UDP
-
-    if(size > 0)
+    int packetCount = 0;  // Static counter to track the number of packets received
+    
+    int size = recvfrom(g_udpSocket, g_intput_buffer, BUFFER_SIZE, 0, (struct sockaddr*)&g_SenderAddr, &lidarAddress_length); //set blocking mode
+    
+    for(int i=0; i<size; i++)
     {
-        if(g_checkLiDAR_IP)	//if sensor IP check
-        {
-            if(strcmp(g_inputLidar_IP.c_str(), inet_ntoa(g_SenderAddr.sin_addr)) == 0)
-            {
-                for(int i=0; i<size; i++)
-                {
-                    output.push_back(g_intput_buffer[i]);
-                }
-            }
-            else
-            {
-                printf("[UDP][input] : input IP is %s\n", inet_ntoa(g_SenderAddr.sin_addr));
-                printf("[UDP][input] : set LiDAR IP is %s\n", g_inputLidar_IP.c_str());
-                output.clear();
-            }
-        }
-        else
-        {
-            for(int i=0; i<size; i++)
-            {
-                output.push_back(g_intput_buffer[i]);
-            }
-        }
+        output.push_back(g_intput_buffer[i]);
     }
-    else
+        
+    /*while(packetCount < 2)
     {
-		// perror(strerror(errno));
-		// printf("?%s\n", strerror(size));
-        output.clear();
-    }
-	g_getLidar_IP = inet_ntoa(g_SenderAddr.sin_addr);
-
+        int size = recvfrom(g_udpSocket, g_intput_buffer, BUFFER_SIZE, 0, (struct sockaddr*)&g_SenderAddr, &lidarAddress_length); //set blocking mode
+        
+        if (size == 0) continue;
+        
+	if(packetCount == 0)
+	{
+	    assert(size == 1472);
+	    output.insert(output.end(), g_intput_buffer, g_intput_buffer + size);	  
+	    // std::cout << "1st packet size: " << output.size() << std::endl;
+	    packetCount++;
+	}
+	   
+	else if(packetCount == 1)
+	{
+	    assert(size == 697);
+	    output.insert(output.end(), g_intput_buffer, g_intput_buffer + size);	    
+	    // std::cout << "2nd packet size: " << output.size() << std::endl;
+	    packetCount++;
+	}	   	
+    }*/
+    // std::cout << "Total packet size: " << output.size() << std::endl;
+    // assert(packetCount == 2);
+    g_getLidar_IP = inet_ntoa(g_SenderAddr.sin_addr);
     return output;
-}
-
+}       
+   
 /**
- * @brief to send data using UDP
+ * @brg_UDP_Multicastief to send data using UDPrecv_buf
  * 
  * @param send_data send data
  */
@@ -279,10 +272,11 @@ void kanaviUDP::run()
 {
 	g_th_loop_recv = true;
 	g_th_loop_send = true;
-	memset(th_buffer_send, 0, BUFFER_SIZE);
+	memset(th_buffer_send, 0, BUFFER_SIZE); // clear buffer before use
 
-	g_th_temp_buf.clear();
+	g_th_temp_buf.clear(); // clear contents of the vector for preparing it for new data
 
+	// runs two threads
 	th_recv = std::thread(&kanaviUDP::th_recv_loop, this);
 	th_send = std::thread(&kanaviUDP::sendDatagram, this);
 }
@@ -354,9 +348,9 @@ void kanaviUDP::th_recv_loop()
 			g_th_recv_ready = true;
 			// setTempBuf(TEMP_UDP_BUF(false, buf_));
 			setTempBuf( buf_ );
-			g_th_recv_ready = false;
+			// g_th_recv_ready = false;
 		}
-		// g_th_recv_ready = false;
+		g_th_recv_ready = false;
 #else
 		getData_fromUDP(buffer, buf_size);
 
@@ -384,6 +378,7 @@ void kanaviUDP::getData_fromUDP(std::vector<u_char> & data)
 	int size = recvfrom(g_udpSocket, buf_, BUFFER_SIZE, 0, (struct sockaddr*)&g_SenderAddr, &lidarAddress_length);
 	if(size > 0)
 	{
+		printf("Received buffer size: %d bytes\n", size);
 		printf("udp input2?:\t%d\n", buf_[size-1]);
 		//test temporary buf
 		data.assign(buf_, buf_+size);
@@ -393,14 +388,15 @@ void kanaviUDP::getData_fromUDP(std::vector<u_char> & data)
 
 void kanaviUDP::getData_fromUDP(u_char buf_[], int &size)
 {
-	// u_char buf_[BUFFER_SIZE];
-	// memset(&buf_, 0, BUFFER_SIZE);
+	//u_char buf_[BUFFER_SIZE];
+	//memset(&buf_, 0, BUFFER_SIZE);
 	memset(&g_SenderAddr, 0, sizeof(struct sockaddr_in));
 	socklen_t lidarAddress_length = sizeof(g_SenderAddr);
 
 	size = recvfrom(g_udpSocket, buf_, BUFFER_SIZE, 0, (struct sockaddr*)&g_SenderAddr, &lidarAddress_length);
 	if(size > 0)
-	{
+	{	
+		printf("Received buffer size: %d bytes\n", size);
 		printf("udp input2?:\t%d\n", buf_[size-1]);
 	}
 	g_getLidar_IP = inet_ntoa(g_SenderAddr.sin_addr);
@@ -419,7 +415,7 @@ void kanaviUDP::eraseVector(const std::vector<int> &er_num_,
 	{
 		for(int i=er_num_.size()-1; i>=0; i--)
 		{
-			// vec_.erase(vec_.begin() + er_num_[i]);
+			vec_.erase(vec_.begin() + er_num_[i]);
 			eraseElement(er_num_[i], vec_);
 		}
 	}
@@ -473,21 +469,22 @@ void kanaviUDP::setTempBuf(const TEMP_UDP_BUF &pair_)
 }
 
 void kanaviUDP::setTempBuf(const std::vector<u_char> &buf_)
-{
+{	
+	
 	if(g_th_temp_group_buf.size() == 0)
 	{
-		g_th_temp_group_buf = buf_;
+		g_th_temp_group_buf = buf_; // If the buffer is empty, store the group buffer into buf.
 	}
 	else if(g_th_temp_group_buf.size() + buf_.size() < BUFFER_SIZE)
 	{
 		for(int i=0; i<buf_.size(); i++)
 		{
-			g_th_temp_group_buf.push_back(buf_[i]);
+			g_th_temp_group_buf.push_back(buf_[i]); // add new data to group buffer until reaches the BUFFER_SIZE.
 		}
 	}
 	else if(g_th_temp_group_buf.size() + buf_.size() >= BUFFER_SIZE)
 	{
-		g_th_temp_recv_buf = g_th_temp_group_buf;
+		g_th_temp_recv_buf = g_th_temp_group_buf; // if it exceeds the BUFFER_SIZE, store the remaining data to recv_buf.
 		g_th_temp_group_buf.clear();
 		g_th_temp_group_buf = buf_;
 	}
@@ -526,10 +523,10 @@ void kanaviUDP::getTempBuf(std::vector<u_char> &buf_)
 	if(g_th_recv_ready)
 	{
 		buf_ = g_th_temp_recv_buf;
-		// g_th_temp_recv_buf.clear();
+		//g_th_temp_recv_buf.clear();
 		g_th_recv_ready = false;
 	}
-	// return g_th_temp_buf;
+	//return g_th_temp_buf;
 }
 
 void kanaviUDP::setNcheckUDPBufSize()
@@ -537,12 +534,12 @@ void kanaviUDP::setNcheckUDPBufSize()
 	int send_size;
 	socklen_t opt_size = sizeof(send_size);
 	getsockopt(g_udpSocket, SOL_SOCKET, SO_SNDBUF, &send_size, &opt_size);
-	printf("*[ERROR] set send buffer size is %d\n", send_size);
+	printf("*[UDP] set send buffer size is %d\n", send_size);
 
 	int recv_size;
 	socklen_t opt_size2 = sizeof(recv_size);
 	getsockopt(g_udpSocket, SOL_SOCKET, SO_RCVBUF, &recv_size, &opt_size2);
-	printf("*[ERROR] set recv buffer size is %d\n", recv_size);
+	printf("*[UDP] set recv buffer size is %d\n", recv_size);
 
 	//reset udp buffer size
 	int setSize = 0;
@@ -559,12 +556,12 @@ void kanaviUDP::setNcheckUDPBufSize()
 		if(send_size < BUFFER_SIZE)
 		{
 			printf("send size resizing..\n");
-			setsockopt(g_udpSocket, SOL_SOCKET, SO_SNDBUF, &setSize, sizeof(setSize));
+			int n = setsockopt(g_udpSocket, SOL_SOCKET, SO_SNDBUF, &setSize, sizeof(setSize));			
 		}
 		if(recv_size < BUFFER_SIZE)
 		{
 			printf("recv size resizing..\n");
-			setsockopt(g_udpSocket, SOL_SOCKET, SO_RCVBUF, &setSize, sizeof(setSize));
+			int m = setsockopt(g_udpSocket, SOL_SOCKET, SO_RCVBUF, &setSize, sizeof(setSize));
 		}
 	}
 }
