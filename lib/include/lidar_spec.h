@@ -53,10 +53,10 @@ namespace KANAVI {
 			VL_AS16			= 0x00,
 			VL_L001IK01		= 0x01,		/* 1ch laser range finder */
 			VL_R001IK01		= 0x02,		/* 1ch 120 scanning LiDAR */
-			VL_R002IF01		= 0x03,		/* 2ch 120 scanning LiDAR (R2) */
+			VL_R002IK01		= 0x03,		/* 2ch 120 scanning LiDAR (R2) */
 			VL_R001IK02		= 0x04,		/* 1ch 300 scanning LiDAR (R300) */
-			VL_R004IK01		= 0x05,		/* 4ch 90 scanning LiDAR ?(S3) */
-			VL_R004IK02		= 0x06		/* 4ch 90 scanning LiDAR ?(R4) */
+			VL_R004IK01		= 0x06,		/* 4ch 90 scanning LiDAR ?(S3) */
+			VL_R001IK03		= 0x07			/* 1ch 270 scanning LiDAR (R270) */ // Modified part
 		};
 	}
 
@@ -201,22 +201,23 @@ namespace KANAVI {
 				const int		VERTICAL_CHANNEL		= static_cast<int>(VERTICAL_FoV / VERTICAL_RESOLUTION);
 			}
 
-			namespace R300 {
-				const double	HORIZONTAL_FoV			= 300;
-				const double	HORIZONTAL_RESOLUTION	= 0.25;
-				const int		HORIZONTAL_DATA_CNT		= static_cast<int>(HORIZONTAL_FoV/HORIZONTAL_RESOLUTION);
-				const double	VERTICAL_FoV			= 1;
-				const double	VERTICAL_RESOLUTION		= 1;
-				const int		VERTICAL_CHANNEL		= static_cast<int>(VERTICAL_FoV / VERTICAL_RESOLUTION);
-			}
-
 			namespace R4 {
 				const double	HORIZONTAL_FoV			= 100;
 				const double	HORIZONTAL_RESOLUTION	= 0.25;
 				const int		HORIZONTAL_DATA_CNT		= static_cast<int>(HORIZONTAL_FoV/HORIZONTAL_RESOLUTION);
-				const double	VERTICAL_FoV			= 4.8;
-				const double	VERTICAL_RESOLUTION		= 1.6;		//- 0 + +
+				const double	VERTICAL_FoV			= 3.2;
+				const double	VERTICAL_RESOLUTION		= 1.07;
 				const int		VERTICAL_CHANNEL		= 4;
+			}
+			
+			// Modified part
+			namespace R270 {
+				const double	HORIZONTAL_FoV			= 270;
+				const double	HORIZONTAL_RESOLUTION	= 0.25;
+				const int		HORIZONTAL_DATA_CNT		= static_cast<int>(HORIZONTAL_FoV-HORIZONTAL_RESOLUTION);
+				const double	VERTICAL_FoV			= 1;
+				const double	VERTICAL_RESOLUTION		= 1;
+				const int		VERTICAL_CHANNEL		= static_cast<int>(VERTICAL_FoV / VERTICAL_RESOLUTION);
 			}
 		}
 
@@ -230,16 +231,6 @@ namespace KANAVI {
 			}
 		}
 
-		namespace R300 {
-			namespace PROTOCOL_VALUE {
-			}
-			namespace PROTOCOL_POS {
-			}
-			namespace PROTOCOL_SIZE {
-				const int TOTAL = 2409;
-			}
-		}
-
 		namespace R4 {
 			namespace PROTOCOL_VALUE {
 			}
@@ -247,6 +238,17 @@ namespace KANAVI {
 			}
 			namespace PROTOCOL_SIZE {
 				const int TOTAL = 809;
+			}
+		}
+
+		// Modified part
+		namespace R270 { 
+			namespace PROTOCOL_VALUE {
+			}
+			namespace PROTOCOL_POS {
+			}
+			namespace PROTOCOL_SIZE {
+				const int TOTAL = 2169;
 			}
 		}
 		namespace COMMON
@@ -258,10 +260,10 @@ namespace KANAVI {
 				enum MODEL {
 					VL_L001IK01		= 0x01,		/* 1ch laser range finder */
 					VL_R001IK01		= 0x02,		/* 1ch 120 scanning LiDAR */
-					VL_R002IF01		= 0x03,		/* 2ch 120 scanning LiDAR (R2) */
+					VL_R002IK01		= 0x03,		/* 2ch 120 scanning LiDAR (R2) */
 					VL_R001IK02		= 0x04,		/* 1ch 300 scanning LiDAR (R300) */
-					VL_R004IK01		= 0x05,		/* 4ch 90 scanning LiDAR ?(S3) */
-					VL_R004IK02		= 0x06		/* 4ch 90 scanning LiDAR ?(R4) */
+					VL_R004IK01		= 0x06,		/* 4ch 90 scanning LiDAR ?(S3) */
+					VL_R001IK03		= 0x07			/* 1ch 270 scanning LiDAR (R270)*/ // Modified part
 				};
 
 				namespace COMMAND {

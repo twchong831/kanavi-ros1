@@ -3,31 +3,32 @@
 ## Contents
 
 - [Kanavi-mobility co., ltd., LiDAR ROS Driver](#kanavi-mobility-co-ltd-lidar-ros-driver)
-  - [Contents](#contents)
-  - [Development ENV](#development-env)
-  - [Support LiDAR Device](#support-lidar-device)
-  - [How to Build Kanavi-mobility LiDAR ROS Package](#how-to-build-kanavi-mobility-lidar-ros-package)
-  - [How to start ROS Node](#how-to-start-ros-node)
-    - [RVIZ visualization Result](#rviz-visualization-result)
-      - [VL-R002IK01 (R2)](#vl-r002ik01-r2)
-      - [VL-R004IK02 (R4)](#vl-r004ik02-r4)
-      - [AXES](#axes)
-        - [1](#1)
-        - [2](#2)
-  - [Directories](#directories)
-    - [KANAVI\_LIB](#kanavi_lib)
-    - [kanavilidar\_ros](#kanavilidar_ros)
-  - [Update Log](#update-log)
-    - [2022-06-29](#2022-06-29)
-    - [2022-07-04](#2022-07-04)
-    - [2022-07-05](#2022-07-05)
-    - [2022-09-07](#2022-09-07)
-    - [2022-09-21](#2022-09-21)
-    - [2023-01-25](#2023-01-25)
-    - [2023-01-26](#2023-01-26)
-    - [2023-02-13](#2023-02-13)
-    - [2023-02-14](#2023-02-14)
-    - [2023-03-28](#2023-03-28)
+	- [Contents](#contents)
+	- [Development ENV](#development-env)
+	- [Support LiDAR Device](#support-lidar-device)
+	- [How to Build Kanavi-mobility LiDAR ROS Package](#how-to-build-kanavi-mobility-lidar-ros-package)
+	- [How to start ROS Node](#how-to-start-ros-node)
+		- [RVIZ visualization Result](#rviz-visualization-result)
+			- [VL-R002IK01 (R2)](#vl-r002ik01-r2)
+			- [VL-R004IK02 (R4)](#vl-r004ik02-r4)
+			- [AXES](#axes)
+				- [1](#1)
+				- [2](#2)
+	- [Directories](#directories)
+		- [KANAVI\_LIB](#kanavi_lib)
+		- [kanavilidar\_ros](#kanavilidar_ros)
+	- [Update Log](#update-log)
+		- [2022-06-29](#2022-06-29)
+		- [2022-07-04](#2022-07-04)
+		- [2022-07-05](#2022-07-05)
+		- [2022-09-07](#2022-09-07)
+		- [2022-09-21](#2022-09-21)
+		- [2023-01-25](#2023-01-25)
+		- [2023-01-26](#2023-01-26)
+		- [2023-02-13](#2023-02-13)
+		- [2023-02-14](#2023-02-14)
+		- [2023-03-28](#2023-03-28)
+		- [2024-06-18](#2024-06-18)
 
 ## Development ENV
 
@@ -43,9 +44,10 @@
 | ⬜️   | VL-L001IK01     | 1ch laser range finder           |
 | ⬜️   | VL-R001IK01 | 1ch 120&deg; LiDAR Sensor        |
 | ✅   | **VL-R002IK01** | 2ch 120&deg; LiDAR Sensor (R2)   |
-| ✅   | **VL-R001IK02**     | 1ch 300&deg; LiDAR Sensor (R300) |
+| ✅   | ~~VL-R001IK02~~     | ~~1ch 300&deg; LiDAR Sensor (R300)~~ |
 | ⬜️   | VL-R004IK01     | 4ch 90&deg; LiDAR Sensor?        |
 | ✅   | **VL-R004IK02** | 4ch 100&deg; LiDAR Sensor (R4)    |
+| ✅   | **VL-R001IK03** | 1ch 270&deg; LiDAR Sensor (R270)    |
 
 ## How to Build Kanavi-mobility LiDAR ROS Package
 
@@ -172,3 +174,7 @@ rosrun kanavilidar_ros kanavilidar_ros -fl ~/catkin_ws/src/kanavilidar_ros/confi
 ### 2023-03-28
 
 - to update for Select Axes
+
+### 2024-06-18
+
+- update VL-R001IK03(R300) func.

@@ -76,6 +76,7 @@ private:
 	bool process_R2(const std::vector<u_char> &data);
 	bool process_R300(const std::vector<u_char> &data);
 	bool process_R4(const std::vector<u_char> &data);
+	bool process_R270(const std::vector<u_char> &data); // Modified part
 
     //parsing -- method
 	void parsingRawData(const std::vector<u_char> &data, lidarDatagram &datagram);
